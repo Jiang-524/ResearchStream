@@ -1,0 +1,7 @@
+---
+import Base from '../../layouts/Base.astro';
+import Archive from '../../components/Archive.astro';
+import { allEntries } from '../../lib/content';
+const entries = (await allEntries()).filter(e => e.collection === 'misc');
+---
+<Base title="Misc." active="misc"><section class="page-intro"><div class="eyebrow">03 / LIFE & OTHER THINGS</div><h1>Misc.<span class="accent-dot"></span></h1></section>{entries.length ? <Archive entries={entries}/> : <div class="misc-blank" aria-label="No entries yet"><span aria-hidden="true">—</span></div>}</Base>

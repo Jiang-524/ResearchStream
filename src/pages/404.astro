@@ -1,0 +1,6 @@
+---
+import Base from '../layouts/Base.astro';
+import I18n from '../components/I18n.astro';
+import { url } from '../lib/content';
+---
+<Base title="Page not found" active=""><section class="empty-state"><span class="empty-symbol">404</span><h1><I18n en="A page not yet written." zh="这一页，还没有写下。"/></h1><a class="outline-button" href={url()}><I18n en="Return to Overview" zh="回到首页"/></a></section></Base>

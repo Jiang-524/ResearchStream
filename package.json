@@ -1,0 +1,35 @@
+{
+  "name": "research-stream",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "build": "astro build && node scripts/postbuild.mjs",
+    "preview": "astro preview --host 0.0.0.0",
+    "check": "astro check",
+    "test": "node --test tests/*.test.mjs",
+    "import": "node scripts/import-content.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.1",
+    "@fontsource/inter": "^5.2.0",
+    "@fontsource/jetbrains-mono": "^5.2.0",
+    "@fontsource/newsreader": "^5.2.0",
+    "astro": "7.3.6",
+    "gray-matter": "^4.0.3",
+    "katex": "^0.16.22",
+    "pagefind": "1.5.2",
+    "rehype-katex": "^7.0.1",
+    "rehype-sanitize": "^6.0.0",
+    "remark-math": "^6.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^5.9.3"
+  }
+}

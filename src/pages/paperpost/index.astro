@@ -1,0 +1,8 @@
+---
+import Base from '../../layouts/Base.astro';
+import Archive from '../../components/Archive.astro';
+import I18n from '../../components/I18n.astro';
+import { allEntries } from '../../lib/content';
+const entries = (await allEntries()).filter(e => e.collection === 'paperpost');
+---
+<Base title="PaperPost · 论文速递" active="paperpost"><section class="page-intro"><div class="eyebrow">01 / READING & RESEARCH</div><h1>PaperPost<span class="accent-dot"></span></h1><p><I18n en="Read the paper. Find the idea. Leave a note." zh="读一篇论文，拆解一个想法，留下一点思考。"/></p></section><Archive entries={entries}/></Base>

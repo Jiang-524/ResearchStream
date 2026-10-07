@@ -1,0 +1,37 @@
+---
+import Card from './Card.astro';
+import I18n from './I18n.astro';
+import Icon from './Icon.astro';
+import { type Entry } from '../lib/content';
+interface Props { entries: Entry[]; wall?: boolean; global?: boolean; }
+const { entries, wall = false, global = false } = Astro.props;
+const topics = [...new Set(entries.map(e => e.data.topic))].sort();
+const tags = [...new Set(entries.flatMap(e => e.data.tags))].sort();
+const months = [...new Set(entries.map(e => e.data.date.slice(0, 7)))].sort().reverse();
+const series = [...new Set(entries.map(e => e.data.series).filter(Boolean))] as string[];
+---
+<section class="archive" data-archive data-dev={import.meta.env.DEV}>
+  <form class="search-form" role="search"><Icon name="search" size={21}/><label class="sr-only" for="query"><I18n en="Search entries" zh="搜索记录"/></label><input id="query" name="q" type="search" autocomplete="off" placeholder="搜索标题、摘要、正文…" data-placeholder-en="Search titles, abstracts, and full text…" data-placeholder-zh="搜索标题、摘要、正文…"/><kbd>/</kbd></form>
+  <div class="filter-bar">
+    <label><span><I18n en="TOPIC" zh="主题"/></span><select name="topic" aria-label="Topic / 主题"><option value="" data-en="All topics" data-zh="全部主题">全部主题</option>{topics.map(topic => <option value={topic}>{topic}</option>)}</select></label>
+    <label><span><I18n en="TAG" zh="标签"/></span><select name="tag" aria-label="Tag / 标签"><option value="" data-en="All tags" data-zh="全部标签">全部标签</option>{tags.map(tag => <option value={tag}>{tag}</option>)}</select></label>
+    <label><span><I18n en="DATE" zh="日期"/></span><select name="month" aria-label="Month / 月份"><option value="" data-en="Any month" data-zh="全部月份">全部月份</option>{months.map(month => <option value={month}>{month}</option>)}</select></label>
+    <label><span><I18n en="LANGUAGE" zh="原文语言"/></span><select name="lang" aria-label="Content language / 原文语言"><option value="" data-en="Any language" data-zh="全部语言">全部语言</option><option value="zh">中文</option><option value="en">English</option></select></label>
+    {global && <label><span><I18n en="SECTION" zh="板块"/></span><select name="section" aria-label="Section / 板块"><option value="" data-en="All sections" data-zh="全部板块">全部板块</option><option value="paperpost">PaperPost</option><option value="learningwall">LearningWall</option><option value="misc">Misc.</option></select></label>}
+    <button class="clear-filters text-link" type="button"><I18n en="Reset" zh="清空"/><Icon name="close" size={14}/></button>
+  </div>
+  <div class="archive-body">
+    <aside class="topic-nav"><span class="eyebrow"><I18n en="EXPLORE" zh="浏览主题"/></span><button data-topic="" class="selected"><I18n en="All entries" zh="全部记录"/><span>{entries.length.toString().padStart(2, '0')}</span></button>{topics.map(topic => <button data-topic={topic}>{topic}<span>{entries.filter(e => e.data.topic === topic).length.toString().padStart(2, '0')}</span></button>)}
+      {series.length > 0 && <div class="series-filter"><label for="series"><I18n en="SERIES" zh="学习系列"/></label><select name="series" id="series"><option value="" data-en="All series" data-zh="全部系列">全部系列</option>{series.map(s => <option value={s}>{s}</option>)}</select></div>}
+      <div class="sidebar-note"><Icon name="book" size={24}/><p><I18n en="A small collection, with room to grow." zh="慢慢收集，常常回看。"/></p></div>
+    </aside>
+    <div class="archive-results"><div class="results-toolbar"><p aria-live="polite"><span id="result-count">{entries.length}</span> <I18n en="entries" zh="条记录"/></p><label class="sort-label"><span class="sr-only"><I18n en="Sort" zh="排序"/></span><select name="sort" aria-label="Sort / 排序"><option value="relevance" data-en="Relevance / newest" data-zh="相关度 / 最新优先">相关度 / 最新优先</option><option value="newest" data-en="Newest first" data-zh="最新优先">最新优先</option><option value="oldest" data-en="Oldest first" data-zh="最早优先">最早优先</option></select><Icon name="down" size={14}/></label></div>
+    <p id="search-status" class="search-status" role="status" hidden></p>
+    <div class:list={['result-list', { 'wall-grid': wall }]}>
+      {entries.map(entry => <div class="result-item" data-key={`${entry.collection}/${entry.id}`} data-date={entry.data.date} data-topic={entry.data.topic} data-tags={JSON.stringify(entry.data.tags)} data-lang={entry.data.lang} data-section={entry.collection} data-series={entry.data.series || ''}><Card entry={entry} image/><p class="search-excerpt" hidden></p></div>)}
+    </div>
+    <div id="no-results" class="empty-state" hidden><span class="empty-symbol">∅</span><h3><I18n en="No notes found, yet." zh="暂时没有找到相关记录"/></h3><p><I18n en="Try a shorter phrase or clear your filters." zh="试试更短的关键词，或清空筛选条件。"/></p><button type="button" class="outline-button clear-filters"><I18n en="Clear filters" zh="清空筛选"/></button></div>
+    </div>
+  </div>
+</section>
+<script>import '../scripts/search';</script>

@@ -1,0 +1,8 @@
+---
+import Base from '../layouts/Base.astro';
+import Archive from '../components/Archive.astro';
+import I18n from '../components/I18n.astro';
+import { allEntries } from '../lib/content';
+const entries = await allEntries();
+---
+<Base title="Search · 搜索" active="search"><section class="page-intro"><div class="eyebrow">THE WHOLE COLLECTION</div><h1><I18n en="Find a thread." zh="找回一条思路。"/></h1><p><I18n en="Search across papers, notes, and everything in between." zh="从论文、笔记和日常记录中，找到你想回看的内容。"/></p></section><Archive entries={entries} global/></Base>

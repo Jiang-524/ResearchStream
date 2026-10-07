@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/newsreader/latin-400.css';
+import '@fontsource/newsreader/latin-400-italic.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import I18n from '../components/I18n.astro';
+import Icon from '../components/Icon.astro';
+import { base, url } from '../lib/content';
+interface Props { title?: string; description?: string; active?: string; }
+const { title = 'Read. Think. Keep a trace.', description = 'A personal journal of research, learning, and ideas in progress. 记录论文、学习与思考。', active = 'overview' } = Astro.props;
+const nav = [['overview', '', 'Overview'], ['paperpost', 'paperpost/', 'PaperPost'], ['learningwall', 'learningwall/', 'LearningWall'], ['misc', 'misc/', 'Misc.']];
+---
+<!doctype html>
+<html lang="zh-CN" data-lang="zh" data-theme="light">
+  <head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content={description}/><meta name="theme-color" content="#fefaf5"/>
+    <title>{title} — ResearchStream</title>
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml"/>
+    <script is:inline>
+      try {
+        const root = document.documentElement;
+        root.dataset.lang = localStorage.getItem('rs-language') || 'zh';
+        root.lang = root.dataset.lang === 'zh' ? 'zh-CN' : 'en';
+        const preference = localStorage.getItem('rs-theme') || 'system';
+        root.dataset.theme = preference === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preference;
+      } catch {}
+    </script>
+  </head>
+  <body data-base={base}>
+    <a class="skip-link" href="#main"><I18n en="Skip to content" zh="跳至正文"/></a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href={url()} aria-label="ResearchStream — Overview">
+          <svg class="brand-mark" width="38" height="28" viewBox="0 0 38 28" fill="none" aria-hidden="true"><path d="M2 11c7-9 11-10 16-3s11 5 18-1M2 21c7-9 11-10 16-3s11 5 18-1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <span>ResearchStream<span class="brand-dot">.</span></span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+          {nav.map(([key, path, label]) => <a href={url(path)} class:list={{ active: active === key }} aria-current={active === key ? 'page' : undefined}>{label}</a>)}
+        </nav>
+        <div class="header-tools">
+          <button id="language-toggle" class="language-toggle" aria-label="Switch language / 切换语言"><span class="en-label">EN</span><span class="slash">/</span><span class="zh-label">中</span></button>
+          <span class="tool-divider"></span>
+          <a href={url('search/')} class="icon-button" aria-label="Search / 搜索"><Icon name="search"/></a>
+          <button id="theme-toggle" class="icon-button" aria-label="Theme: system / 主题：跟随系统" title="Light / Dark / System"><span class="light-icon"><Icon name="sun"/></span><span class="dark-icon"><Icon name="moon"/></span><span class="theme-auto">A</span></button>
+        </div>
+      </div>
+    </header>
+    <div id="offline-status" class="offline-status" role="status" hidden><I18n en="Offline · reading saved pages" zh="当前离线 · 正在阅读已缓存页面"/></div>
+    <main id="main" class="site-main"><slot/></main>
+    <footer class="site-footer"><a class="footer-brand" href={url()}>ResearchStream.</a><p><I18n en="An evolving research & learning journal." zh="让阅读留下痕迹，让知识慢慢生长。"/></p><span class="footer-note">READ · THINK · KEEP</span></footer>
+    <script>import '../scripts/site';</script>
+  </body>
+</html>

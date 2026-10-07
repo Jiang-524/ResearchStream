@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import Archive from '../../components/Archive.astro';
+import I18n from '../../components/I18n.astro';
+import Icon from '../../components/Icon.astro';
+import { allEntries, url } from '../../lib/content';
+const entries = (await allEntries()).filter(e => e.collection === 'learningwall');
+---
+<Base title="LearningWall · 学习墙" active="learningwall"><section class="page-intro"><div class="eyebrow">02 / LEARNING IN PUBLIC</div><h1>LearningWall<span class="accent-dot"></span></h1><div class="intro-bottom"><p><I18n en="Small discoveries. Connected ideas. A wall of things learned." zh="把零散的理解，慢慢连成自己的知识。"/></p><a class="outline-button" href={url('write/')}><Icon name="pen" size={16}/><I18n en="Writing space" zh="写作空间"/></a></div></section><Archive entries={entries} wall/></Base>

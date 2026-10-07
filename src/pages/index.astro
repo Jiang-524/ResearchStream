@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import I18n from '../components/I18n.astro';
+import Icon from '../components/Icon.astro';
+import Card from '../components/Card.astro';
+import { allEntries, entryUrl, url, sectionNames } from '../lib/content';
+const entries = await allEntries();
+const months = [...new Set(entries.map(e => e.data.date.slice(0, 7)))];
+---
+<Base>
+  <section class="hero">
+    <div class="eyebrow"><span class="accent-dot"></span><I18n en="A PERSONAL RESEARCH JOURNAL" zh="一个持续生长的研究与学习手记"/></div>
+    <h1><span class="i18n-en">Read. Think.<br/><em>Keep a trace.</em></span><span class="i18n-zh">阅读、思考，<br/><em>留下轨迹。</em></span></h1>
+    <p class="hero-description"><I18n en="Notes on papers, learning, and ideas in progress." zh="记录论文、学习，以及尚在生长的想法。"/></p>
+    <span class="hero-index" aria-hidden="true">FIELD NOTES<br/>01 — ∞</span>
+  </section>
+  <section class="recent-section" aria-labelledby="recent-heading">
+    <div class="section-heading"><div><span class="section-number">01 /</span><h2 id="recent-heading"><I18n en="Recent entries" zh="最近记录"/></h2></div><div class="carousel-controls"><button class="round-button" data-scroll="-1" aria-label="Previous cards / 上一组"><Icon name="left" size={18}/></button><button class="round-button" data-scroll="1" aria-label="Next cards / 下一组"><Icon name="right" size={18}/></button></div></div>
+    <div class="card-track" id="recent-track" tabindex="0" aria-label="Recent entries / 最近记录">{entries.slice(0, 8).map(entry => <Card entry={entry}/>)}</div>
+    {!entries.length && <p class="empty-copy"><I18n en="The first page is still waiting to be written." zh="第一篇记录，正等待落笔。"/></p>}
+  </section>
+  <section class="stream-section" aria-labelledby="stream-heading">
+    <div class="section-heading"><div><span class="section-number">02 /</span><h2 id="stream-heading"><I18n en="The research stream" zh="沿着时间，慢慢积累"/></h2></div><a href={url('search/')} class="text-link"><I18n en="Explore the archive" zh="检索全部记录"/><Icon name="arrow" size={17}/></a></div>
+    <div class="stream-layout"><div class="timeline">
+      {months.map(month => <section id={`month-${month}`} class="month-group"><h3 class="month-label">{month.replace('-', ' / ')}</h3>{entries.filter(e => e.data.date.startsWith(month)).map(entry => <a class="timeline-entry" href={entryUrl(entry)}><time datetime={entry.data.date}>{entry.data.date.slice(5).replace('-', '.')}</time><span class="timeline-dot"></span><div class="timeline-body"><h4>{entry.data.title}</h4><p class="abstract">{entry.data.abstract}</p></div><span class="category-pill">{sectionNames[entry.collection]}</span><span class="timeline-arrow"><Icon name="arrow" size={17}/></span></a>)}</section>)}
+    </div><aside class="archive-nav"><span class="eyebrow"><I18n en="BY MONTH" zh="月份索引"/></span>{months.map((month, i) => <a class:list={{ selected: i === 0 }} href={`#month-${month}`}><span>{month.slice(0, 4)}</span>{month.slice(5)}<span class="archive-count">{entries.filter(e => e.data.date.startsWith(month)).length}</span></a>)}<p><I18n en="One note at a time." zh="每次记录，都是一点积累。"/></p></aside></div>
+  </section>
+</Base>

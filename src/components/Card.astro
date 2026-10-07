@@ -1,0 +1,17 @@
+---
+import { type Entry, entryUrl, sectionNames, thumbnail, minutes } from '../lib/content';
+import I18n from './I18n.astro';
+import Icon from './Icon.astro';
+interface Props { entry: Entry; image?: boolean; }
+const { entry, image = false } = Astro.props;
+const cover = image ? thumbnail(entry) : null;
+---
+<a href={entryUrl(entry)} class:list={['entry-card', { 'has-image': !!cover }]}>
+  {cover && <div class="card-image"><img src={cover} alt="" loading="lazy"/></div>}
+  <div class="card-content">
+    <div class="card-eyebrow"><span>{sectionNames[entry.collection]}</span>{entry.data.demo && <span class="sample-mark"><I18n en="SAMPLE" zh="示例"/></span>}</div>
+    <h3>{entry.data.title}</h3>
+    <p class="abstract" title={entry.data.abstract}>{entry.data.abstract}</p>
+    <div class="card-meta"><time datetime={entry.data.date}>{entry.data.date.replaceAll('-', '.')}</time><span class="meta-dot">·</span><span>{minutes(entry)} <I18n en="MIN READ" zh="分钟阅读"/></span><Icon name="arrow" size={16}/></div>
+  </div>
+</a>

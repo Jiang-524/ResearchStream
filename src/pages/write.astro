@@ -1,0 +1,7 @@
+---
+import Base from '../layouts/Base.astro';
+import I18n from '../components/I18n.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/content';
+---
+<Base title="Writing space · 写作空间" active="learningwall"><section class="page-intro"><div class="eyebrow">A PLACE FOR THE NEXT IDEA</div><h1><I18n en="Start with a note." zh="从一篇笔记开始。"/></h1><p><I18n en="Write in Markdown. Bring your thoughts together." zh="用 Markdown 写下想法，慢慢把理解连起来。"/></p></section><section class="writing-reserved"><div class="writing-symbol"><Icon name="pen" size={32}/></div><span class="category-pill"><I18n en="EDITOR · PLANNED" zh="在线编辑 · 已预留"/></span><h2><I18n en="Your writing space is on the way." zh="为下一次落笔，留一个位置。"/></h2><p><I18n en="Online editing and cloud saving are not available in this version. For now, download a Markdown template and write with your favorite editor." zh="本版尚未开放在线编辑和云端保存。你可以先下载 Markdown 模板，在熟悉的编辑器中写作，再导入网站。"/></p><a class="solid-button" href={url('templates/note.md')} download><Icon name="download" size={17}/><I18n en="Download note template" zh="下载笔记模板"/></a><a class="text-link" href={url('learningwall/')}><I18n en="Return to LearningWall" zh="返回学习墙"/><Icon name="arrow" size={16}/></a></section></Base>
