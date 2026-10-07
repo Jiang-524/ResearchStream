@@ -6,6 +6,8 @@ date: "2026-10-07"
 lang: zh
 topic: Learning
 tags: [笔记]
+series: "矩阵论"
+order: 1
 draft: true
 ---
 

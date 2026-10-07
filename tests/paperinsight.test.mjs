@@ -1,0 +1,28 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, readFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+const script = new URL('../scripts/sync-paperinsight.mjs', import.meta.url).pathname;
+test('legacy daily report imports without pictures, normalizes math, and reruns without duplicate posts', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'rs-daily-'));
+  mkdirSync(path.join(root,'inbox'));
+  const source = path.join(root,'inbox','2026-09-15_robot_manipulation_daily.md');
+  writeFileSync(source, '# 2026-09-15｜A paper\n\n- **今日一句话判断：** 理解强化学习。\n\n## 方法\n\\[\nx^2\n\\]\n\n```python\nx = 1\n```\n');
+  const run = (...args) => spawnSync(process.execPath, [script, '--source', path.join(root,'inbox'), ...args], { cwd:root, encoding:'utf8' });
+  assert.equal(run('--dry-run').status, 0);
+  assert.deepEqual(readdirSync(root), ['inbox']);
+  const first = run(); assert.equal(first.status, 0, first.stderr);
+  const folder = readdirSync(path.join(root,'content/paperpost'))[0];
+  const output = readFileSync(path.join(root,'content/paperpost',folder,'index.md'),'utf8');
+  assert.match(output, /abstract: 理解强化学习。/);
+  assert.match(output, /series: Robot Manipulation Daily/);
+  assert.match(output, /\$\$\nx\^2\n\$\$/);
+  assert.doesNotMatch(output, /# 2026-09-15/);
+  const again = run(); assert.equal(again.status, 0, again.stderr);
+  assert.match(again.stdout, /unchanged/);
+  assert.equal(readdirSync(path.join(root,'content/paperpost')).length, 1);
+  writeFileSync(source, readFileSync(source,'utf8') + '\nCorrection');
+  assert.notEqual(run().status, 0, 'changed sources require explicit update');
+});

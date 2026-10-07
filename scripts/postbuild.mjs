@@ -42,10 +42,11 @@ version.update(readFileSync(new URL(import.meta.url)));
 for (const file of files) version.update(path.relative(output, file)).update(readFileSync(file));
 const cacheName = `researchstream-${createHash('sha256').update(base).digest('hex').slice(0,6)}-${version.digest('hex').slice(0, 12)}`;
 const prefix = cacheName.slice(0, -12);
-const core = ['', 'paperpost/', 'learningwall/', 'misc/', 'search/', 'write/', 'offline/', 'entries.json', 'favicon.svg'].map(p => base + p);
+const core = ['', 'paperpost/', 'learningwall/', 'misc/', 'search/', 'series/', 'write/', 'offline/', 'entries.json', 'favicon.svg'].map(p => base + p);
 for (const file of files) {
   const relative = path.relative(output, file).split(path.sep).join('/');
   if (relative.startsWith('_astro/') || relative.startsWith('pagefind/')) core.push(base + relative);
+  if (relative.startsWith('series/') && relative !== 'series/index.html' && relative.endsWith('/index.html')) core.push(base + relative.replace(/index\.html$/, ''));
 }
 const worker = `const CACHE = ${JSON.stringify(cacheName)};
 const PREFIX = ${JSON.stringify(prefix)};

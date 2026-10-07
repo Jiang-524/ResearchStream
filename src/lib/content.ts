@@ -1,10 +1,12 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { assertUniqueIds, publishedEntries, firstContentImage, mediaUrl, readingMinutes } from './content-tools.mjs';
+import { seriesSlug } from './discovery.mjs';
 export type Entry = CollectionEntry<'paperpost' | 'learningwall' | 'misc'>;
 export const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 export const url = (path = '') => base + path.replace(/^\//, '');
 export const sectionNames = { paperpost: 'PaperPost', learningwall: 'LearningWall', misc: 'Misc.' };
 export const entryUrl = (entry: Entry) => url(`${entry.collection}/${entry.id}/`);
+export const seriesUrl = (name: string) => url(`series/${seriesSlug(name)}/`);
 export const thumbnail = (entry: Entry) => {
   const image = firstContentImage(entry.body || '');
   return image ? mediaUrl(entry.collection, entry.id, image, base) : null;

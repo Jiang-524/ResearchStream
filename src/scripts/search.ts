@@ -65,6 +65,7 @@ if (archive) {
     if (request !== sequence) return;
     let count = 0;
     const ordered = [...items].sort((a,b) => {
+      if (params.get('series') && !params.get('sort')) return (Number(a.dataset.order || Infinity) - Number(b.dataset.order || Infinity)) || a.dataset.date!.localeCompare(b.dataset.date!);
       if (params.get('sort') === 'oldest') return a.dataset.date!.localeCompare(b.dataset.date!);
       if (matches && !params.get('sort')) return (matches.get(a.dataset.key!)?.rank ?? Infinity) - (matches.get(b.dataset.key!)?.rank ?? Infinity);
       return b.dataset.date!.localeCompare(a.dataset.date!);

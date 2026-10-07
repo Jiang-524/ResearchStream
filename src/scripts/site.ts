@@ -34,14 +34,7 @@ languageButton?.addEventListener('click', () => {
 });
 applyTheme(); applyLanguage();
 
-const track = document.querySelector<HTMLElement>('#recent-track');
-if (track) {
-  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-scroll]')];
-  const update = () => buttons.forEach(button => { button.disabled = button.dataset.scroll === '-1' ? track.scrollLeft <= 2 : track.scrollLeft + track.clientWidth >= track.scrollWidth - 2; });
-  buttons.forEach(button => button.addEventListener('click', () => track.scrollBy({ left: Number(button.dataset.scroll) * track.clientWidth, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })));
-  track.addEventListener('scroll', update, { passive: true });
-  new ResizeObserver(update).observe(track); update();
-}
+import './recommendations';
 
 document.querySelectorAll<HTMLPreElement>('.prose pre').forEach(pre => {
   const button = document.createElement('button'); button.type = 'button'; button.className = 'copy-code';

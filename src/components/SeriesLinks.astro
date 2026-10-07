@@ -1,0 +1,8 @@
+---
+import I18n from './I18n.astro';
+import { type Entry, seriesUrl, url } from '../lib/content';
+import { groupSeries } from '../lib/discovery.mjs';
+interface Props { entries: Entry[]; }
+const series = groupSeries(Astro.props.entries);
+---
+{series.length > 0 && <section class="series-discovery" aria-label="Series / 系列阅读"><div class="section-heading"><h2><I18n en="Follow a series" zh="沿着一个主题读下去"/></h2><a class="text-link" href={url('series/')}><I18n en="All series" zh="全部系列"/> ↗</a></div><div class="series-links">{series.map(group => <a href={seriesUrl(group.name)}><span>{group.name}</span><small>{group.entries.length} <I18n en="entries" zh="篇"/></small><span aria-hidden="true">↗</span></a>)}</div></section>}

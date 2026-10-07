@@ -65,19 +65,37 @@ pnpm build
 
 `draft: true` 不生成公开文章、列表、搜索记录或图片。`public/` 是公开目录，不要把私密笔记放进去。`entries.json` 只包含已发布文章，是公开的搜索内容源。历史上已经发布或下载过的内容，不能通过改为草稿撤回所有访客已有的副本。
 
-当前有 5 篇标注为示例的内容和 1 篇不发布的草稿测试样本。接入真实内容后，可以删除 `content/` 下这些示例文章目录；无需改变页面代码。
+当前有 3 篇从 paperInsight 导入的真实历史日报、5 篇标注为示例的内容和 1 篇不发布的草稿测试样本。接入真实内容后，可以删除 `content/` 下这些示例文章目录；无需改变页面代码。
+
+## 推荐阅读与 Series
+
+首页推荐区每次随机抽取 4 篇，点击“换一批”优先展示上一批以外的文章。卡片缓慢往返滚动，悬停、聚焦、手动操作时暂停；也可以用暂停按钮控制。系统开启减少动态效果时不自动滚动。
+
+`series` 是系列归属，`order` 是学习顺序，`tags` 用于跨系列检索。例子：
+
+```yaml
+series: "RL for dexterous manipulation"
+order: 1
+tags: [reinforcement-learning, dexterous-manipulation]
+```
+
+学习笔记同样可以设置 `series: "矩阵论"`。相同名称的系列可以汇集 PaperPost 与 LearningWall；系列页按 order 排序，未指定顺序的文章按日期升序排列。首页、板块列表和文章中都能进入完整系列；手机也可筛选 Series。
 
 ## 日更自动化与部署
 
-处理链：现有自动化输出 `.md` 和图片 → 上述导入命令 → 提交内容变更 → 构建成功后部署 `dist/`。本项目不重复运行论文阅读任务，也没有连接尚未提供的真实日报来源。
+目标仓库 [Jiang-524/ResearchStream](https://github.com/Jiang-524/ResearchStream)，使用独立 GitHub Pages 项目站。无需域名或服务器。
 
-`.github/workflows/site.yml` 在推送 main/agent_dev 和 PR 时运行安装、类型检查、构建、测试，并保存可部署产物。默认**不发布**。选用 GitHub Pages 后：
+已有 Work 每日阅读任务 → 提交 Markdown 到仓库 `inbox/paperinsight/` → GitHub Actions 导入文章、构建、测试 → 发布 Pages。同一份原稿重复导入会跳过，不会重复发文；原稿改变后需要显式 --update。
 
-1. 把本项目放进独立仓库，避免覆盖已有个人主页。
-2. 仓库 Settings → Pages → Source 选择 GitHub Actions。
-3. 设置仓库变量 `SITE_URL`（如 `https://Jiang-524.github.io`）及 `BASE_PATH`（项目站如 `/researchStream/`；自定义域名根目录为 `/`）。
-4. 设置 `ENABLE_PAGES=true`，并按你的默认分支调整 workflow 中的分支名。只有推送默认分支或从默认分支手动运行才部署，PR 不发布。
-5. 日报提交到该发布分支后会自动更新网站。构建失败时不会部署半成品。
+```sh
+pnpm sync:papers --file '/home/jiangyingzhuo/paperInsight/某份日报.md' --dry-run
+pnpm sync:papers --file '/home/jiangyingzhuo/paperInsight/某份日报.md'
+pnpm sync:papers # 导入仓库 inbox
+```
+
+兼容当前旧日报的文件日期、一级标题和“今日一句话判断”；其它格式需要补齐 frontmatter。下一次自动化建议直接输出完整 frontmatter，详见 [可复制的 Work 发布指令](docs/design/work-publishing.md)。
+
+在仓库 Settings → Pages → Source 选择 GitHub Actions。工作流默认发布默认分支，PR 和 agent_dev 仅检查；不需要额外配置 SITE_URL / BASE_PATH，默认地址为 `https://Jiang-524.github.io/ResearchStream/`。自定义域名时可覆盖这两个变量；设置 ENABLE_PAGES=false 可暂停部署。
 
 其他静态平台：构建命令 `pnpm build`，输出目录 `dist`，Node 24，按实际 URL 设置相同变量。GitHub Pages 参考：[Astro 官方部署指南](https://docs.astro.build/en/guides/deploy/github/)。
 
@@ -101,9 +119,11 @@ BASE_PATH=/research/ pnpm preview --port 4321
 
 ## 下一步 TODO
 
-- [ ] 提供一份真实日报 Markdown 和图片目录，接入已有自动化输出并验证一轮更新。
-- [ ] 确认托管平台和仓库。本轮仅本地运行，未上传或公开部署。
+- [x] 用 paperInsight 的 3 篇真实无图日报验证导入。
+- [ ] 把 Work 发布指令加入现有每日任务，验证下一天真实提交。
+- [x] 选择独立 ResearchStream 仓库和 GitHub Pages。
+- [ ] 启用 Pages 并检查首轮线上部署。
 - [ ] 可选：购买域名并配置 DNS/HTTPS；静态站不要求购买独立服务器。
 - [ ] 需要在线写作时，明确是否跨设备保存，再实现认证与持久存储接口（见 `docs/design/editor-contract.md`）。
 
-设计稿、原始提案与开发计划见 `docs/design/`。样式以 `src/styles/global.css` 为准。项目仅设置了本地 `agent_dev` 分支，提交采用 Codex 代理身份，不修改全局 Git 身份。
+设计稿、原始提案与开发计划见 `docs/design/`。样式以 `src/styles/global.css` 为准。项目在 `agent_dev` 分支开发，提交采用 Codex 代理身份，不修改全局 Git 身份。

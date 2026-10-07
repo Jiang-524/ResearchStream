@@ -10,11 +10,13 @@ concurrency:
   group: researchstream-${{ github.ref }}
   cancel-in-progress: true
 env:
-  SITE_URL: ${{ vars.SITE_URL || 'https://example.com' }}
-  BASE_PATH: ${{ vars.BASE_PATH || '/' }}
+  SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
+  BASE_PATH: ${{ vars.BASE_PATH || format('/{0}/', github.event.repository.name) }}
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -25,19 +27,29 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Import daily Markdown from Work
+        run: pnpm sync:papers
       - run: pnpm check
       - run: pnpm build
       - run: pnpm test
+      - name: Save normalized articles
+        if: github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
+        run: |
+          git add content/paperpost
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'content: import daily paper notes'
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: static-site
           path: dist
-      - uses: actions/upload-pages-artifact@v3
-        if: vars.ENABLE_PAGES == 'true' && github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
+      - uses: actions/upload-pages-artifact@v4
+        if: vars.ENABLE_PAGES != 'false' && github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
         with:
           path: dist
   deploy:
-    if: vars.ENABLE_PAGES == 'true' && github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
+    if: vars.ENABLE_PAGES != 'false' && github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
     needs: build
     runs-on: ubuntu-latest
     permissions:

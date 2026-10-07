@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import I18n from '../../components/I18n.astro';
+import Card from '../../components/Card.astro';
+import { allEntries, url, type Entry } from '../../lib/content';
+import { groupSeries } from '../../lib/discovery.mjs';
+export async function getStaticPaths() {
+  return groupSeries(await allEntries()).map(group => ({ params: { slug: group.slug }, props: { name: group.name, entries: group.entries } }));
+}
+const { name, entries } = Astro.props as { name: string; entries: Entry[] };
+---
+<Base title={`${name} · Series`} active="series"><div class="breadcrumb"><a href={url('series/')}><I18n en="All series" zh="全部系列"/></a><span>/</span><span>{entries.length} <I18n en="entries" zh="篇"/></span></div><section class="page-intro series-intro"><div class="eyebrow">SERIES</div><h1>{name}</h1><p><I18n en="The complete collection, in reading order." zh="这一系列的全部文章，按学习顺序排列。"/></p></section><ol class="series-reading-list">{entries.map(entry => <li><Card entry={entry} image/></li>)}</ol></Base>

@@ -1,0 +1,8 @@
+---
+import Base from '../../layouts/Base.astro';
+import I18n from '../../components/I18n.astro';
+import SeriesLinks from '../../components/SeriesLinks.astro';
+import { allEntries } from '../../lib/content';
+const entries = await allEntries();
+---
+<Base title="Series · 系列阅读" active="series"><section class="page-intro"><div class="eyebrow">CONNECTED NOTES</div><h1><I18n en="Series" zh="系列阅读"/><span class="accent-dot"></span></h1><p><I18n en="One subject, many discoveries. Every note in its place." zh="把同一个主题下的论文与笔记，按学习顺序连起来。"/></p></section><SeriesLinks entries={entries}/></Base>
