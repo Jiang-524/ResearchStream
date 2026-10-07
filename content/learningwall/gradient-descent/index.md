@@ -13,7 +13,9 @@ demo: true
 
 ## A landscape and a direction
 
-![A one-dimensional loss curve and illustrative optimization steps](./descent.svg)
+![A one-dimensional loss curve and illustrative optimization steps][landscape]
+
+[landscape]: ./descent.svg
 
 For a differentiable objective $f(\theta)$, the gradient points toward the direction of steepest local increase under the Euclidean norm. A basic descent step moves in the opposite direction:
 

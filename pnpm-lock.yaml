@@ -29,6 +29,9 @@ importers:
       katex:
         specifier: ^0.16.22
         version: 0.16.47
+      mdast-util-from-markdown:
+        specifier: ^2.1.0
+        version: 2.1.0
       pagefind:
         specifier: 1.5.2
         version: 1.5.2

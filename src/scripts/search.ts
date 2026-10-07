@@ -59,7 +59,7 @@ if (archive) {
       } catch {
         if (request !== sequence) return;
         status.textContent = message('Search is unavailable. If offline, reconnect to load the index. Filters remain available.', '搜索暂不可用；若处于离线状态，请联网加载索引。仍可使用筛选。'); status.hidden = false;
-        matches = new Map();
+        matches = null;
       }
     }
     if (request !== sequence) return;

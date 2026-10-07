@@ -3,6 +3,14 @@ export function validateMetadata(data) {
     if (typeof data[key] !== 'string' || !data[key].trim()) throw new Error(`Missing or empty ${key}`);
   }
   if (!['zh', 'en'].includes(data.lang)) throw new Error('lang must be zh or en');
+  for (const key of ['draft', 'demo']) {
+    if (data[key] !== undefined && typeof data[key] !== 'boolean') throw new Error(`${key} must be a boolean`);
+  }
+  if (data.paper?.url !== undefined) {
+    let url;
+    try { url = new URL(data.paper.url); } catch { throw new Error('paper.url must be an HTTP(S) URL'); }
+    if (!['http:', 'https:'].includes(url.protocol)) throw new Error('paper.url must be an HTTP(S) URL');
+  }
   const date = data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || isNaN(Date.parse(date)) || new Date(date).toISOString().slice(0, 10) !== date) {
     throw new Error('date must be a real YYYY-MM-DD date');
@@ -24,7 +32,11 @@ export function assertUniqueIds(entries) {
 }
 
 export function markdownImages(body) {
-  return [...body.matchAll(/!\[[^\]]*\]\(\s*(?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']*["'])?\s*\)/g)].map(m => m[1] || m[2]);
+  const nodes = [];
+  const visit = node => { nodes.push(node); node.children?.forEach(visit); };
+  visit(fromMarkdown(body));
+  const definitions = new Map(nodes.filter(node => node.type === 'definition').map(node => [node.identifier, node.url]));
+  return [...new Set(nodes.filter(node => node.type === 'image' || node.type === 'imageReference').map(node => node.url || definitions.get(node.identifier)).filter(Boolean))];
 }
 
 export function firstContentImage(body) {
@@ -47,3 +59,15 @@ export function mediaUrl(collection, slug, image, base = '/') {
   if (relative.split('/').includes('..')) throw new Error('Article images must stay in their article directory');
   return `${basePath(base)}media/${collection}/${slug}/${relative.split('/').map(encodeURIComponent).join('/')}`;
 }
+
+export function articleLink(href, collection, slug, base = '/') {
+  if (/^(?:[a-z][\w+.-]*:|#|\/\/)/i.test(href)) return href;
+  const prefix = basePath(base);
+  if (href.startsWith('/')) return href.startsWith(prefix) ? href : prefix + href.slice(1);
+  const [pathname, hash] = href.split('#');
+  if (!pathname.endsWith('.md')) return href;
+  const route = path.posix.resolve('/', collection, slug, pathname).replace(/\/index\.md$/, '/').replace(/\.md$/, '/');
+  return prefix + route.slice(1) + (hash ? '#' + hash : '');
+}
+import { fromMarkdown } from 'mdast-util-from-markdown';
+import path from 'node:path';

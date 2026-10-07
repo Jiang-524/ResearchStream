@@ -26,35 +26,35 @@
 
 ## Task 1 — Content pipeline and routes
 
-- [ ] Configure Astro, lock dependencies, add content metadata validation and Markdown rendering.
-- [ ] Write and run failing tests for import validation, duplicate IDs, draft exclusion and image resolution; implement those paths and rerun.
-- [ ] Add marked sample Markdown for paper notes and learning notes; include math, tables, code, footnotes and a local image. Keep Misc. empty.
-- [ ] Build routes from published collections; verify article HTML and generated URLs.
+- [x] Configure Astro, lock dependencies, add content metadata validation and Markdown rendering.
+- [x] Write and run failing tests for import validation, duplicate IDs, draft exclusion and image resolution; implement those paths and rerun.
+- [x] Add marked sample Markdown for paper notes and learning notes; include math, tables, code, footnotes and a local image. Keep Misc. empty.
+- [x] Build routes from published collections; verify article HTML and generated URLs.
 
 Files: `astro.config.mjs`, `src/content.config.ts`, `src/lib/content.*`, `scripts/import-content.mjs`, `tests/content.test.mjs`, `content/**`.
 Interface: published entries expose metadata, collection, slug, reading time and first image; article URLs use deployment base.
 
 ## Task 2 — Complete reading interface
 
-- [ ] Build shared shell, homepage cards/timeline, searchable archives, article body/TOC and empty Misc.
-- [ ] Add language/theme preferences, responsive layouts, keyboard navigation and copy-code controls.
-- [ ] Build and verify responsive navigation, card overflow, article anchors and preference persistence in browser.
+- [x] Build shared shell, homepage cards/timeline, searchable archives, article body/TOC and empty Misc.
+- [x] Add language/theme preferences, responsive layouts, keyboard navigation and copy-code controls.
+- [x] Build and verify responsive navigation, card overflow, article anchors and preference persistence in browser.
 
 Files: `src/layouts/**`, `src/components/**`, `src/pages/**`, `src/styles/**`, `src/scripts/**`.
 Interface: static HTML provides semantic data attributes for preferences, search and filters; article metadata supplies shared navigation.
 
 ## Task 3 — Search, import and offline delivery
 
-- [ ] Generate a single multilingual search index using Pagefind custom records with language neutralized for shared lookup; verify actual CJK search behavior.
-- [ ] Preserve query/filter state in URL and render safe, highlighted search excerpts.
-- [ ] Generate versioned offline shell and resource cache; cache visited articles, handle uncached navigation and refresh on reconnect.
-- [ ] Provide honest writer-reserved page and downloadable Markdown templates. Document import command and automated build workflow.
-- [ ] Verify published output excludes drafts and unselected private content, import command round trip, search, theme/language, offline revisit and local assets.
+- [x] Generate a single multilingual search index using Pagefind custom records with language neutralized for shared lookup; verify actual CJK search behavior.
+- [x] Preserve query/filter state in URL and render safe, highlighted search excerpts.
+- [x] Generate versioned offline shell and resource cache; cache visited articles, handle uncached navigation and refresh on reconnect.
+- [x] Provide honest writer-reserved page and downloadable Markdown templates. Document import command and automated build workflow.
+- [x] Verify published output excludes drafts and unselected private content, import command round trip, search, theme/language, offline revisit and local assets.
 
 Files: `scripts/postbuild.mjs`, `src/scripts/search.ts`, `public/**`, `.github/workflows/**`, `README.md`.
 
 ## Task 4 — Handoff
 
-- [ ] Run build, type checks, core tests and browser review. Fix material issues.
-- [ ] Update CHANGELOG and README with actual results and remaining integration TODOs.
-- [ ] Save local stage commits. Open local preview and give user URL. Keep deployment and real daily automation linkage explicit TODOs until target/sample are available.
+- [x] Run build, type checks, core tests and browser review. Fix material issues.
+- [x] Update CHANGELOG and README with actual results and remaining integration TODOs.
+- [x] Save local stage commits. Open local preview and give user URL. Keep deployment and real daily automation linkage explicit TODOs until target/sample are available.

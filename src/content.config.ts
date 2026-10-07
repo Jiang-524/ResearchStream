@@ -3,9 +3,10 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { validateMetadata } from './lib/content-tools.mjs';
 
+const dateString = z.preprocess(value => value instanceof Date ? value.toISOString().slice(0, 10) : value, z.string());
 const schema = z.object({
   id: z.string(), title: z.string(), abstract: z.string(),
-  date: z.string(), updated: z.string().optional(), lang: z.enum(['zh', 'en']),
+  date: dateString, updated: dateString.optional(), lang: z.enum(['zh', 'en']),
   topic: z.string().default('Notes'), tags: z.array(z.string()).default([]),
   draft: z.boolean().default(false), demo: z.boolean().default(false),
   series: z.string().optional(), order: z.number().optional(),
