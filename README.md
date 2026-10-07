@@ -85,11 +85,11 @@ tags: [reinforcement-learning, dexterous-manipulation]
 
 ## 日更自动化与部署
 
-机器人学习与操作日报使用 [专用 Markdown 模板](public/templates/robot-manipulation-daily.md) 和 [检索、首发核验、配图及发布规范](docs/design/robot-manipulation-daily.md)。固定 UTC−5 每日 05:30 启动，目标 07:00 前发布；最多 3 项，近 3 天无合格内容才回退近 7 天。
+机器人学习与操作日报使用 [专用 Markdown 模板](public/templates/robot-manipulation-daily.md) 和 [检索、首发核验、配图及发布规范](docs/design/robot-manipulation-daily.md)。北京时间（Asia/Shanghai）每日 04:00 在云端启动，完成核验后发布；最多 3 项，近 3 天无合格内容才回退近 7 天。
 
 目标仓库 [Jiang-524/ResearchStream](https://github.com/Jiang-524/ResearchStream)，使用独立 GitHub Pages 项目站。无需域名或服务器。
 
-Codex 每日阅读任务（也兼容 Work 投递）→ 提交 Markdown 到仓库 `inbox/paperinsight/` → GitHub Actions 导入文章、构建、测试 → 发布 Pages。同一份原稿重复导入会跳过，不会重复发文；原稿改变后需要显式 --update。
+云端每日阅读任务→ 提交 Markdown 到仓库 `inbox/paperinsight/` → GitHub Actions 导入文章、构建、测试 → 发布 Pages。同一份原稿重复导入会跳过，不会重复发文；原稿改变后需要显式 --update。
 
 ```sh
 pnpm sync:papers --file '/home/jiangyingzhuo/paperInsight/某份日报.md' --dry-run

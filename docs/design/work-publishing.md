@@ -3,13 +3,12 @@
 目标仓库：https://github.com/Jiang-524/ResearchStream
 已发布站点：https://Jiang-524.github.io/ResearchStream/
 
-最新日报模板、首发核验和配图规则见 [机器人学习与操作日报规范](robot-manipulation-daily.md)。2026-10-07 用户确认旧任务未创建或已停用；新任务在 Codex 当前对话中配置，下面保留 Work 投递接口的说明。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
+最新日报模板、首发核验和配图规则见 [机器人学习与操作日报规范](robot-manipulation-daily.md)。2026-10-07 用户进一步要求迁移为云端任务，北京时间每日 04:00 启动；云端配置状态见新版规范，下面保留 Work 投递接口的说明。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
 
-## 添加到现有 Work 自动化末尾的指令
+## Work 自动化的仓库投递指令
 
 ```text
-日报生成后，继续保存到 /home/jiangyingzhuo/paperInsight。
-同时把同一份 Markdown 保存到 ResearchStream 仓库的 inbox/paperinsight/YYYY-MM-DD_robot_manipulation_daily.md，并提交到 Jiang-524/ResearchStream 的 main 分支。这个文件就是公开发布的版本。
+日报生成后，直接将公开版 Markdown 保存到 ResearchStream 仓库的 inbox/paperinsight/YYYY-MM-DD_robot_manipulation_daily.md，并提交到 Jiang-524/ResearchStream 的 main 分支。这个文件就是公开发布的版本。
 
 公开版必须包含 YAML frontmatter：
 id: paperinsight-YYYY-MM-DD
