@@ -3,7 +3,7 @@
 目标仓库：https://github.com/Jiang-524/ResearchStream
 已发布站点：https://Jiang-524.github.io/ResearchStream/
 
-现有 Work 自动化负责每天读论文，不新增重复阅读任务。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
+最新日报模板、首发核验和配图规则见 [机器人学习与操作日报规范](robot-manipulation-daily.md)。2026-10-07 用户确认旧任务未创建或已停用；新任务在 Codex 当前对话中配置，下面保留 Work 投递接口的说明。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
 
 ## 添加到现有 Work 自动化末尾的指令
 
@@ -27,7 +27,7 @@ draft: false
 同一天仅新增一个稳定 id 的日报；重复运行时先检查仓库，完全相同的文件跳过，已有但不同的文章不要直接覆盖。不要通过改文件名发布第二份同日重复日报。
 
 如果运行环境有本地仓库，先获取 main 的最新版本，在干净的独立工作目录中提交当天 inbox 文件并 push，不能把 agent_dev 的开发改动一并发布。不使用 force push。有冲突时停止发布并报告。
-如果仅有 GitHub 连接器，直接在上述仓库 main 分支创建当天 inbox 文件，不要提交其它文件。
+如果仅有 GitHub 连接器，在上述仓库 main 分支提交当天 inbox 文件及其实际引用的图片，不要提交无关文件。
 
 提交后查看 Build research journal 工作流：只有 build、deploy 都成功且发布链接可访问，才报告发布成功。若无 GitHub 写权限或部署失败，保留原 Markdown，清楚报告阻塞，不把“本地已保存”说成“网站已更新”。
 ```
@@ -76,5 +76,5 @@ Work 提交 inbox → Action 校验并导入 content/paperpost → 构建与测�
 
 ## TODO
 
-- 将上述指令加入你现有的 Work 阅读任务；该任务不在本地 Codex 自动化列表中，本轮没有修改它。
-- 验证下一次 Work 实际提交一天的新日报。当前验证的是历史日报导入与网站发布链路，不代表每日任务已经修改。
+- [x] 按新版规范配置并启用每日任务。
+- [ ] 验证首个定时运行实际提交一天的新日报。历史日报导入与模板构建检查不等同于真实定时运行验收。

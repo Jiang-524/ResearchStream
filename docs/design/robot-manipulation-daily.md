@@ -1,0 +1,111 @@
+# 机器人学习与操作日报：写作与发布规范
+
+本文与 [Markdown 模板](../../public/templates/robot-manipulation-daily.md) 共同定义日报流程。参考 `RobotTTT.md` 和 `2026-08-28_robot_manipulation_daily.md` 的组织方式：保留从问题到方法、训练推理与实验的深入讲解，减少重复总结、碎片化小节与宽表格。参考稿中的论文信息没有在制定模板时重新核验，不能把它们当成后续日报的数据来源。
+
+## 时间与选题
+
+目标是在固定 **UTC−5 每日 07:00 前**完成发布；05:30 启动，预留 90 分钟用于检索、阅读全文、配图和构建。这等于 UTC 10:30、Asia/Shanghai 18:30 启动，UTC 12:00、北京时间 20:00 为目标完成时间。不使用有夏令时变化的 America/New_York 代替固定 UTC−5。日报日期按固定 UTC−5 计算。
+
+运行开始时记录检索截止时刻 T，正常窗口为 [T−72 小时, T]。仅当近 3 天没有符合质量要求且尚未报道的内容时，回退至 [T−168 小时, T]，并在正文说明。窗口上限固定为本次 T，不用写作结束时间悄悄扩大窗口。机器错过启动时不要虚报按时完成；执行当日任务并注明实际截止和发布时间，不自动制造缺失日期的历史日报。
+
+最多入选 3 项，优先机器人操作、灵巧操作、手内操作、接触丰富任务、双臂操作和真机学习。方法涵盖 VLA、World Model、World-Action Model、JEPA、强化学习、视觉方法、模仿学习、规划与混合方法，无需为每种路线保留配额。一般 locomotion 或纯视觉/语言模型只有对操作提出直接且实质的新结果时才纳入。
+
+检索 arXiv cs.RO/cs.LG/cs.CV、OpenReview、作者或实验室项目页、官方代码与模型仓库、机构技术报告及有原始证据的技术分析。搜索结果与社交转发用于发现线索；入选依据必须回到原始来源，能够读取足够方法、实验或分析正文。营销稿、空泛趋势评论、无法核实时间的条目和仅修订版本不作为新成果。若首推论文无法阅读全文，不能仅凭摘要完成深读，应换为可核验的候选。
+
+先按操作相关性和贡献实质筛选，再比较证据质量、与已有方法的差异、实验覆盖及开放程度。不要以新闻热度、机构声望或代码星标代替阅读。若只有报告/分析合格，可按其实际文种讲解并注明当日无可深读的新论文，不伪称其为论文。
+
+## 首次公开时间与去重
+
+逐项比对 arXiv submission history、OpenReview 的公开记录、带日期的作者项目公告、官方仓库 release/公告和机构首发文章，以**最早可核验的公开证据**决定是否在窗口内。仓库创建时间或早期内部 commit 时间本身不能证明研究当时已公开；搜索抓取时间、页面最近修改时间、arXiv v2/v3 和新闻转发时间不能重置首发日期。
+
+区分 arXiv v1 的“提交时间”和实际可确认的公开时间；不要把提交时刻自动写成公开时刻。若只找到日期，则写日期与来源时区（未知时明确未知），不能编造时分秒。日期精度的来源按可能时间区间判断；跨窗口边界而无法确认者不入选。发现早于窗口的官方公开记录，即使 arXiv v1 很新也应排除。正文来源表简要保留时间证据、版本和交叉核验结果，关键数字链接到正文及 Section/Table/Figure/Equation。
+
+核对已有 `inbox/paperinsight/` 与 `content/paperpost/`：按 arXiv 基础 ID（忽略 v 后缀）、DOI、规范化论文标题/官方地址去重。近 3 天已有合格项时不为凑满 3 项加入更早成果。既有成果的新代码、权重或版本通常不占“新论文”名额；若报告本身有实质新分析，必须清楚写出文种、首发日期和与旧工作的关系。
+
+## 元数据与正文
+
+完整 YAML front matter 示例以模板为准。`id: paperinsight-YYYY-MM-DD` 稳定且全站唯一；`date` 必须是带引号的真实日期。`lang: zh`、`topic: Robotics`、`series: Robot Manipulation Daily`、`draft: false` 固定。`title` 用“日期｜首推简称：核心机制”，`abstract` 用一个完整句子概括方法及必要边界。日报不设置 `order`，系列自然按日期排列。
+
+站点接受自由文本 topic/tags，没有强制枚举；日报采用受控词汇避免同义标签分裂。基础 tags 为 `robot-manipulation`、`paper-insight`，按实际内容添加 1–5 个标签：
+
+| 维度 | 推荐标签 |
+|---|---|
+| 任务 | `dexterous-manipulation`, `in-hand-manipulation`, `bimanual-manipulation`, `contact-rich-manipulation` |
+| 学习方法 | `reinforcement-learning`, `imitation-learning`, `offline-rl`, `online-rl`, `vla` |
+| 表示与预测 | `world-model`, `world-action-model`, `jepa`, `computer-vision` |
+| 感知与系统 | `tactile-sensing`, `visuotactile`, `sim-to-real`, `motion-planning`, `test-time-adaptation` |
+
+仅讨论相关工作时提到 JEPA/RL 不足以添加相应方法标签；纯视觉/模仿学习日报无需强加 RL。`paper.title/authors/url` 指向首推论文，作者数组只录入核实过的姓名。无首推论文时省略整个 `paper` 字段。不要写尚无 schema 支持的自定义分类字段；`source/sourceHash` 由导入器生成，原稿不填写。
+
+正文为中文连贯叙述，深读通常约 2500–4500 汉字，按方法复杂度调整而非填充字数。概览表只保留工作、时间、方法、理由四列。首推依次讲清：具体任务和瓶颈；与既有方法的关键差异；输入输出及整体信息流；关键模块和目标函数；训练与部署的差别；实验与消融；结论边界。其它至多两项各用一段简述，不复制首推的详细摘要。方法可有 2–3 个有具体含义的小标题，避免层层编号。
+
+图放在首次解释它的位置，表只用于真正可比的数字。对核心结果核实任务数量、分母、试验/种子数、预算、硬件、基线和评测协议；区分在线末段成功率与独立冻结评测、相对改善与百分点、推理延迟与整机闭环速度。作者主张与解读者推断用自然句式区分。全文不使用“论文事实”等标签，不包含用户名、个人视角、用户工作的帮助或面向个人的实验建议。来源与署名中的作者姓名应忠实保留。
+
+## 配图、公式与路径
+
+新日报沿用导入器“源文件同目录或子目录”的规则，统一使用：
+
+```text
+inbox/paperinsight/YYYY-MM-DD_robot_manipulation_daily.md
+inbox/paperinsight/assets/YYYY-MM-DD/<paper-key>/fig-01-overview.png
+inbox/paperinsight/assets/YYYY-MM-DD/<paper-key>/fig-02-method.png
+inbox/paperinsight/assets/YYYY-MM-DD/<paper-key>/fig-03-setup.png
+```
+
+正文引用 `![描述](assets/YYYY-MM-DD/<paper-key>/fig-01-overview.png)`。`paper-key` 用简短 ASCII 小写加连字符；PNG/JPEG/WebP 均可，扩展名与真实格式一致。不要用本机绝对路径、`../`、图片热链或写死 `/ResearchStream/`。Markdown 内联/引用式图片会被识别；不要用 HTML `<img>` 代替，因为它不参与本地资源收集。
+
+首推通常保存 2–4 张：整体框架、非重复的关键方法、1–2 张实验装置/任务设置或必要结果。优先取作者论文 HTML 中原图；否则从已核验版本的 PDF 提取或清晰裁切图区域，检查编号、文字与面板没有截断。只保存所需图片，不把整份 PDF、整页截图或所有图表批量入库。保留原始科学含义、署名和已知许可信息，每张图用中文图注解释如何读，并链接确切论文版本与原图号。无法确认来源或再利用条件时不用；原文无适合图或无法取得时在文章自然说明，不能画图冒充原论文图。下载后实际打开检查清晰度。
+
+第一张非徽章正文图会自动成为卡片缩略图，因此优先框架图。导入器只复制正文实际引用的本地图片：写入 `content/paperpost/<id>/assets/...`，构建后成为 `/ResearchStream/media/paperpost/<id>/assets/...`。图片与原稿应在同一个 Git 提交中。附件 PDF、查证缓存与工作日志放工作目录，不能放进 `public/`。
+
+公式由 Astro 的 `remark-math` 和 `rehype-katex` 渲染，Pages 仅托管生成后的 HTML；不是 Jekyll 数学插件。行内用 `$x_t$`，块公式的 `$$` 各占一行并在前后留空行。每个符号在相邻正文定义，引用原文公式编号。只保留帮助理解的 1–3 个核心公式；不要在行内使用 `$$x_t$$`，不要用未配置的宏、HTML 脚本或依赖 `\label/\ref`。长公式可在块内使用 `aligned`，移动端检查横向溢出。
+
+## 仓库与发布流程
+
+目标为 `Jiang-524/ResearchStream` 的 `main`。当前工作流是 `.github/workflows/site.yml`（名称 `Build research journal`；若以后改名，以实际文件为准），Node 24、pnpm 11.19.0。发布链路：
+
+```text
+main 上的 inbox 原稿 + 图片
+  → pnpm sync:papers
+  → content/paperpost/<id>/index.md + 被引用图片
+  → pnpm check → pnpm build → pnpm test
+  → Action 回写规范化文章
+  → 同一次工作流部署 GitHub Pages
+```
+
+实际配置以 `.github/workflows/` 为准。`main`（默认分支）可部署；`agent_dev` 和 PR 仅做检查。默认站点为 `https://jiang-524.github.io/ResearchStream/`；`BASE_PATH=/ResearchStream/`，`SITE_URL=https://jiang-524.github.io`。默认分支的 Action 生成提交不会另起一次 push 构建，部署已包含在同一次运行中。
+
+每次执行按下面顺序完成：
+
+1. 读取仓库当前规范并获取 `origin/main`；从最新 main 建立干净独立工作目录。保留用户当前 checkout、未提交文件和开发分支。先检查当日文件、稳定 ID 与历史报道，再开展检索。不要把 `agent_dev` 的修改混入 main。
+2. 写入当日原稿及实际引用的图片。移除占位符、写作提示、无效链接和不适用段落，检查元数据、首发证据及所有关键数字。
+3. 使用下列命令验证导入和生产构建。实际打开新文章，检查标题层级、窄屏表格、公式、图片及图注；输出中不得有 KaTeX 错误或遗留定界符，所有本地图片应存在且可访问。
+4. 本地导入用于验证，会生成规范化文章；只显式暂存并提交当日 inbox Markdown 与其图片，规范化副本由 Action 回写。不使用 `git add .`，不提交临时材料、缓存、依赖或其他人的文件。
+5. 再获取远端确认没有并发更新；常规 fast-forward push 到 `main`，不 force push。远端前进时在最新 main 重放本次内容并重验；出现文件冲突或当日已存在不同稿件时保留草稿并报告，不覆盖。
+6. 查看与该提交对应的 `Build research journal` 运行，确认 build、deploy 均成功。访问新文章和正文图片并确认新内容，再报告已发布，提供文章、原稿、commit 和 Actions 链接。
+
+```sh
+pnpm install --frozen-lockfile
+pnpm sync:papers --file inbox/paperinsight/YYYY-MM-DD_robot_manipulation_daily.md --dry-run
+pnpm sync:papers
+pnpm check
+SITE_URL=https://jiang-524.github.io BASE_PATH=/ResearchStream/ pnpm build
+pnpm test
+BASE_PATH=/ResearchStream/ pnpm preview --port 4321
+```
+
+同日完全相同的原稿跳过，不生成第二个文件或 ID。当天已发布时先核对其 Action 与线上状态，成功后结束；仍在部署时继续核验即可。原稿改变后导入器要求显式 `--update`，而日常 Action 不带这个参数：因此修订旧日报必须人工检查原稿与规范化副本，不在定时任务里偷偷覆盖或只改 inbox。另一个细节是 sourceHash 仅覆盖 Markdown；只替换同路径图片可能不会重新导入，修订图片也必须走明确更新流程。
+
+构建、推送或部署失败时保存原稿、图片与可复现错误，下一次先检查已成功的步骤再重试。提交成功不等于站点已发布。尽量在 07:00 前完成，但网络、配额、来源读取、排队或设备离线可能导致超时；应报告真实状态与时间，不为赶时限跳过核验。
+
+## 空窗日
+
+3 天无合格项后回退 7 天，仍无合格项时，生成当日简短记录：标题“YYYY-MM-DD｜机器人学习与操作日报：暂无合格新内容”，摘要说明已回溯 7 天，保留基础元数据和实际检索截止时间，正文简述覆盖来源与没有入选的主要原因。没有首推则删除 `paper`、方法标签、深读、公式与配图部分。不重复旧论文，不虚构新成果；来源不可访问导致未能完成检索时应报告“检索不完整”，不能写成“没有新内容”。
+
+## 自动任务运行条件与验收
+
+日报由当前 Codex 对话的每日自动任务执行，使用已保存的本机 ResearchStream 项目获取远端和建立隔离目录；GitHub Actions 负责发布，**不会自行检索或写稿**。本机任务需要电脑开机、Codex 正在运行、网络与现有 GitHub SSH 写入权限可用。GitHub CLI 不是必需依赖，工作流状态也可通过 GitHub API 或网页读取。权限和连接失效时保留产物并明确提示。[官方运行条件](https://developers.openai.com/codex/app/automations)
+
+2026-10-07 已创建并启用当前对话的每日任务，调度为 Asia/Shanghai 18:30（固定 UTC−5 05:30）。用户已确认旧日报任务未创建或已停用。新任务每次成功发布后报告一次结果；同日已完成且没有新状态时保持安静，发布失败或需处理的阻塞及时说明。
+
+本规范的模板与构建检查不等同于一轮真实论文检索。首个定时运行还需验收实际来源核验、图片获取、当日内容质量与截止时间，不应提前宣称未来每天一定准时完成。
