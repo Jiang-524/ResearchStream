@@ -1,7 +1,7 @@
 # Work 每日论文 → ResearchStream
 
 目标仓库：https://github.com/Jiang-524/ResearchStream
-预期站点：https://Jiang-524.github.io/ResearchStream/
+已发布站点：https://Jiang-524.github.io/ResearchStream/
 
 现有 Work 自动化负责每天读论文，不新增重复阅读任务。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
 
@@ -51,7 +51,7 @@ draft: false
 
 ## 已有文件的兼容导入
 
-旧日报不带 frontmatter 时，导入器从文件名前缀提取日期，从首个一级标题提取标题，从“今日一句话判断”提取摘要，默认归入 Robot Manipulation Daily。当前先导入 2026-09-15、09-18、09-27 三篇无图原稿；没有修改源文件。
+旧日报不带 frontmatter 时，导入器从文件名前缀提取日期，从首个一级标题提取标题，从“今日一句话判断”提取摘要，默认归入 Robot Manipulation Daily。先导入 2026-09-15、09-18、09-27 三篇无图原稿，再仅投递 09-20 的 GeoAAC 原稿至 inbox，已由线上 Action 自动导入并发布。没有修改源文件。
 
 ```sh
 pnpm sync:papers --file '/home/jiangyingzhuo/paperInsight/某份日报.md' --dry-run
@@ -69,6 +69,10 @@ Work 提交 inbox → Action 校验并导入 content/paperpost → 构建与测�
 首次在仓库 Settings → Pages → Build and deployment → Source 选择 GitHub Actions。工作流默认按仓库名生成部署子路径，当前为 /ResearchStream/；可用 SITE_URL / BASE_PATH 变量覆盖，ENABLE_PAGES=false 暂停部署。
 
 不要依赖 Action 内的 GITHUB_TOKEN 提交再触发另一个 push workflow，因此构建与部署在同一次运行内完成。GitHub 官方说明：[触发工作流](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)、[Pages 自定义工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
+
+## 已完成验证
+
+[首轮 Action](https://github.com/Jiang-524/ResearchStream/actions/runs/37604802602) 的 build / deploy 均成功。GeoAAC 的规范化文章由 github-actions[bot] 自动提交，线上系列页显示 4 篇真实日报。GitHub Actions 与 Pages 已启用。
 
 ## TODO
 

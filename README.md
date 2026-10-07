@@ -1,5 +1,7 @@
 # ResearchStream
 
+线上网站：[ResearchStream](https://jiang-524.github.io/ResearchStream/)。
+
 一个以 Markdown 为内容源的研究与学习博客。采用个人主页的奶油白 / 日落橙配色，提供 Overview、PaperPost、LearningWall、Misc. 四个入口。
 
 ## 本地运行
@@ -65,7 +67,7 @@ pnpm build
 
 `draft: true` 不生成公开文章、列表、搜索记录或图片。`public/` 是公开目录，不要把私密笔记放进去。`entries.json` 只包含已发布文章，是公开的搜索内容源。历史上已经发布或下载过的内容，不能通过改为草稿撤回所有访客已有的副本。
 
-当前有 3 篇从 paperInsight 导入的真实历史日报、5 篇标注为示例的内容和 1 篇不发布的草稿测试样本。接入真实内容后，可以删除 `content/` 下这些示例文章目录；无需改变页面代码。
+当前有 4 篇从 paperInsight 导入的真实历史日报、5 篇标注为示例的内容和 1 篇不发布的草稿测试样本。接入真实内容后，可以删除 `content/` 下这些示例文章目录；无需改变页面代码。
 
 ## 推荐阅读与 Series
 
@@ -119,10 +121,10 @@ BASE_PATH=/research/ pnpm preview --port 4321
 
 ## 下一步 TODO
 
-- [x] 用 paperInsight 的 3 篇真实无图日报验证导入。
+- [x] 用 paperInsight 的 4 篇真实无图日报验证导入，其中 GeoAAC 由 Action 自动导入。
 - [ ] 把 Work 发布指令加入现有每日任务，验证下一天真实提交。
 - [x] 选择独立 ResearchStream 仓库和 GitHub Pages。
-- [ ] 启用 Pages 并检查首轮线上部署。
+- [x] 已启用 Actions 和 Pages，首轮 build / deploy 成功，线上 GeoAAC 文章可访问。
 - [ ] 可选：购买域名并配置 DNS/HTTPS；静态站不要求购买独立服务器。
 - [ ] 需要在线写作时，明确是否跨设备保存，再实现认证与持久存储接口（见 `docs/design/editor-contract.md`）。
 

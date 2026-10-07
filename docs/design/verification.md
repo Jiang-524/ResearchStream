@@ -25,3 +25,14 @@
 - 写作入口仅提供模板和接口预留，尚无在线保存、认证或跨设备同步。
 - UI 翻译不自动翻译正文；可通过 translationKey 关联用户提供的中英文文章。
 - 外部图片、浏览器清理缓存、首次离线访问不在离线保证范围内。
+
+
+# v0.3 验证记录
+
+- 根目录及 /ResearchStream/ 构建通过；16 项核心测试通过；38 个文件类型检查 0 errors / warnings / hints。
+- 推荐区点击换一批后更换了 4 篇文章；自动滚动位置随时间前进；暂停后间隔复查 scrollLeft 保持 112。
+- 390px 手机实测：推荐区按钮完整，Series 可筛选，3 篇日报按日期升序显示；真实长文宽度 375px，不超过 390px 视口。该篇 43 处公式、0 个 KaTeX 错误。
+- 完整 Series 页面汇集所有成员；文章内可进入系列并沿上一篇 / 下一篇阅读。
+- GitHub Actions 最初关闭，启用后从 main 手动运行。首轮 run 37604802602 完成历史日报 GeoAAC 的 inbox 导入、规范化提交、16 项测试、build 和 deploy。
+- 线上 https://jiang-524.github.io/ResearchStream/ 已实际打开，时间线存在 GeoAAC，Robot Manipulation Daily 系列显示 4 篇。
+- 剩余外部动作：用户将 docs/design/work-publishing.md 中的指令加入现有 Work 任务，验证下一个日更提交。未新建重复阅读任务。
