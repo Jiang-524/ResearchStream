@@ -54,7 +54,9 @@ inbox/paperinsight/assets/YYYY-MM-DD/<paper-key>/fig-03-setup.png
 
 正文引用 `![描述](assets/YYYY-MM-DD/<paper-key>/fig-01-overview.png)`。`paper-key` 用简短 ASCII 小写加连字符；PNG/JPEG/WebP 均可，扩展名与真实格式一致。不要用本机绝对路径、`../`、图片热链或写死 `/ResearchStream/`。Markdown 内联/引用式图片会被识别；不要用 HTML `<img>` 代替，因为它不参与本地资源收集。
 
-首推通常保存 2–4 张：整体框架、非重复的关键方法、1–2 张实验装置/任务设置或必要结果。优先取作者论文 HTML 中原图；否则从已核验版本的 PDF 提取或清晰裁切图区域，检查编号、文字与面板没有截断。只保存所需图片，不把整份 PDF、整页截图或所有图表批量入库。保留原始科学含义、署名和已知许可信息，每张图用中文图注解释如何读，并链接确切论文版本与原图号。无法确认来源或再利用条件时不用；原文无适合图或无法取得时在文章自然说明，不能画图冒充原论文图。下载后实际打开检查清晰度。
+首推通常保存 2–4 张：整体框架、非重复的关键方法、1–2 张实验装置/任务设置或必要结果。优先取作者论文 HTML 中原图；也可从已核验的作者公开仓库取同一原图，或从已核验版本的 PDF 提取、清晰裁切图区域，检查编号、文字与面板没有截断。只保存所需图片，不把整份 PDF、整页截图或所有图表批量入库。保留原始科学含义、署名和已知许可信息，每张图用中文图注解释如何读，并链接确切论文版本与原图号。无法确认来源或再利用条件时不用；原文无适合图或无法取得时在文章自然说明，不能画图冒充原论文图。下载后实际打开检查清晰度。
+
+GitHub 图片须使用支持二进制的接口，例如 `github_fetch_file` 的 `encoding=base64`，通过文件或变量无损转存；不能让模型手工重抄 base64，也不能用只支持 UTF-8 的读取接口报错来判断图片不可用。解码、尺寸、哈希和实际打开分别验证文件完整性与内容，提交后的 blob 应与所下载的作者原图一致。缺图或未能打开验收时明确记录，不把仅有文件路径或提交成功写成配图完成。
 
 第一张非徽章正文图会自动成为卡片缩略图，因此优先框架图。导入器只复制正文实际引用的本地图片：写入 `content/paperpost/<id>/assets/...`，构建后成为 `/ResearchStream/media/paperpost/<id>/assets/...`。图片与原稿应在同一个 Git 提交中。附件 PDF、查证缓存与工作日志放工作目录，不能放进 `public/`。
 
@@ -106,6 +108,10 @@ BASE_PATH=/ResearchStream/ pnpm preview --port 4321
 
 日报改由 ChatGPT Work 云端托管任务执行，通过已有 GitHub 连接读取并写入仓库；GitHub Actions 负责发布，**不会自行检索或写稿**。正常云端运行不依赖用户电脑开机、Codex 桌面 app 运行、本机目录或 SSH 凭据。GitHub 连接必须保持有效并具有目标仓库的写入权限。权限、额度或连接失效时应保留云端产物并明确提示，不把“已安排任务”说成“日报已发布”。[官方定时任务说明](https://learn.chatgpt.com/docs/automations)
 
-2026-10-08 在原云端对话中更新并回读了既有任务 **Robot Manipulation Daily**：已启用，时区为 Asia/Shanghai，每日 02:00 启动、目标 04:00 前完成发布；首次采用新时刻的运行是 2026-10-09 02:00。旧 Codex 本机任务保持暂停，历史同类云端任务保持停用，未新增重复任务。文章完成后给出简短中文摘要与发布链接；同日已完成且没有新状态时保持安静，发布失败或需处理的阻塞及时说明。
+2026-10-08 按用户要求建立了独立的 ChatGPT Work 云端任务 **机器人操作研究日报**（ID：`6ac75f331d608191944ca9c13f49088f`），并回读确认已启用。时区为 Asia/Shanghai，每日 02:00 启动、目标 04:00 前完成发布；日历规则的下一次运行是 2026-10-09 02:00，但接口的 `next_run_time` 仍为空，未来实际触发尚未验证。原云端任务 **Robot Manipulation Daily**（ID：`6ac631b928288191a84771c3d061634f`）已暂停并保留历史，旧 Codex 本机任务保持暂停。新任务直接执行，不通过旧会话移交。文章完成后给出简短中文摘要与发布链接；同日已完成且没有新状态时保持安静，发布失败或需处理的阻塞及时说明。
 
-模板与构建检查不等同于一轮真实论文检索。此前云端运行曾报告写入失败，但可读取的记录没有包含原始拒绝详情，因此尚不能确认失败根因，也不能把已有的连接权限视为端到端发布验收。后续真实运行仍需核验来源、图片获取、当日内容质量、原稿与图片同次提交以及线上发布结果，不应提前宣称未来每天一定准时完成。
+2026-10-08 的独立云端手动运行已完成真实检索并在北京时间 17:28:42 提交首份 CureWM 日报（[原稿提交](https://github.com/Jiang-524/ResearchStream/commit/875352ae0004a2f675813d9bb718725283b8f53d)）；[Actions 37756953754](https://github.com/Jiang-524/ResearchStream/actions/runs/37756953754) 的导入、检查、构建、测试和部署均成功。这证明当前云端 GitHub 连接能写入 main；不代表当天按时发布或未来调度已验证。
+
+用户重新授权来源访问后，云端通过作者 GitHub 仓库获取并实际打开四张原图，完成[同日补图提交 762d8d3](https://github.com/Jiang-524/ResearchStream/commit/762d8d3305a9d977649c3d96ec7accdc68d7a6bf)。本次经审核的修订临时让 Action 执行单文件 `sync:papers --update`，随后已恢复日常命令；[补图运行 37759469986](https://github.com/Jiang-524/ResearchStream/actions/runs/37759469986) 与[恢复工作流后的运行 37759717899](https://github.com/Jiang-524/ResearchStream/actions/runs/37759717899) 的 build、deploy 均成功。原稿、规范化副本和图片哈希已核对一致。协调端打开[公开文章](https://jiang-524.github.io/ResearchStream/paperpost/paperinsight-2026-10-08/)，确认四张图成功加载、28 个 KaTeX 元素无渲染错误，桌面及窄屏无页面横向溢出，并检查了图文和公式排版。
+
+该次运行的图片获取和云端网页验收曾被浏览器权限阻塞，原始返回为 `The user declined permission for this action`，后续仍出现 `A saved user permission setting blocks this action`；云端 shell 克隆仓库另报 `Failed to connect to browser-proxy port 8889`。用户重新授权后，协调端在 Cloud computer 设置中为 `https://arxiv.org` 和 `https://jiang-524.github.io` 单独保存并回读确认 Always allow，其他站点的默认询问设置保持不变。保存后的云端只读复验仍返回同一权限阻塞；设置与执行结果不一致的原因尚未查明，协调端的网页验收不能替代云端浏览器恢复证明。浏览器访问授权与 GitHub 写入权限应分别检查；有待处理的权限提示时不能把等待误判为写入失败。早先旧任务报告的 GitHub 拒绝仍无原始错误证据，历史根因未知。[诊断记录](https://github.com/Jiang-524/ResearchStream/blob/codex/cloud-daily-diagnostic-20261008/diagnostics/cloud-daily-20261008/evidence.md) 保留了本次工具返回。后续仍需逐次核验来源、真实图片、当日内容及线上显示，不应提前宣称每天一定准时完成。

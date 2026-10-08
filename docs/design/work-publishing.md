@@ -3,7 +3,7 @@
 目标仓库：https://github.com/Jiang-524/ResearchStream
 已发布站点：https://Jiang-524.github.io/ResearchStream/
 
-最新日报模板、首发核验和配图规则见 [机器人学习与操作日报规范](robot-manipulation-daily.md)。沿用现有云端任务，按 2026-10-08 的要求调整为北京时间每日 02:00 启动、目标 04:00 前完成发布；云端配置状态见新版规范。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
+最新日报模板、首发核验和配图规则见 [机器人学习与操作日报规范](robot-manipulation-daily.md)。按 2026-10-08 的要求改为独立云端任务“机器人操作研究日报”，北京时间每日 02:00 启动、目标 04:00 前完成发布，旧云端任务已暂停；真实任务 ID、配置及执行证据见新版规范。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
 
 ## Work 自动化的仓库投递指令
 
