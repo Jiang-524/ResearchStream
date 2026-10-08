@@ -1,0 +1,2 @@
+Cloud diagnostic: multi-file atomic commit on branch codex/cloud-daily-diagnostic-20261008.
+Image is a 1x1 test PNG, not publication content.
