@@ -28,9 +28,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Import daily Markdown from Work
-        run: |
-          pnpm sync:papers --file inbox/paperinsight/2026-10-08_robot_manipulation_daily.md --update
-          pnpm sync:papers
+        run: pnpm sync:papers
       - run: pnpm check
       - run: pnpm build
       - run: pnpm test
