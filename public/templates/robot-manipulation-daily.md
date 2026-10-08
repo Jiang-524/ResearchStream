@@ -1,6 +1,6 @@
 ---
 id: paperinsight-{{DATE}}
-title: "{{DATE}}｜{{LEAD_SHORT_TITLE}}：{{CENTRAL_IDEA}}"
+title: "{{LEAD_FULL_TITLE}}"
 abstract: "{{ONE_SENTENCE_METHOD_RESULT_AND_BOUNDARY}}"
 date: "{{DATE}}"
 lang: zh
@@ -14,7 +14,9 @@ paper:
   url: "{{PRIMARY_PAPER_URL}}"
 ---
 
-# {{DATE}}｜{{LEAD_SHORT_TITLE}}：{{CENTRAL_IDEA}}
+# {{LEAD_FULL_TITLE}}
+
+<!-- 标题只用核实过的论文原名，不加日期、日报前缀、作者/读者姓名或另拟副标题；日期由 date 字段在网站显示，原稿文件名仍用 YYYY-MM-DD_robot_manipulation_daily.md。论文原名自带的冒号和副标题应保留。 -->
 
 检索截至 {{CUTOFF_WITH_OFFSET}}；覆盖 {{WINDOW_START_WITH_OFFSET}} 至 {{CUTOFF_WITH_OFFSET}}，采用近 {{3_OR_7}} 天窗口。{{FALLBACK_NOTE_IF_USED}}
 

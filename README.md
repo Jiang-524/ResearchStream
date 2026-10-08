@@ -85,7 +85,7 @@ tags: [reinforcement-learning, dexterous-manipulation]
 
 ## 日更自动化与部署
 
-机器人学习与操作日报使用 [专用 Markdown 模板](public/templates/robot-manipulation-daily.md) 和 [检索、首发核验、配图及发布规范](docs/design/robot-manipulation-daily.md)。北京时间（Asia/Shanghai）每日 04:00 在云端启动，完成核验后发布；最多 3 项，近 3 天无合格内容才回退近 7 天。
+机器人学习与操作日报使用 [专用 Markdown 模板](public/templates/robot-manipulation-daily.md) 和 [检索、首发核验、配图及发布规范](docs/design/robot-manipulation-daily.md)。北京时间（Asia/Shanghai）每日 02:00 在云端启动，目标 04:00 前完成核验并发布；最多 3 项，近 3 天无合格内容才回退近 7 天。文章标题直接用首推论文原名，日期由网站显示；原稿文件名仍保留日期以便归档。
 
 目标仓库 [Jiang-524/ResearchStream](https://github.com/Jiang-524/ResearchStream)，使用独立 GitHub Pages 项目站。无需域名或服务器。
 

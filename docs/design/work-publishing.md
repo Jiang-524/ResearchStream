@@ -3,7 +3,7 @@
 目标仓库：https://github.com/Jiang-524/ResearchStream
 已发布站点：https://Jiang-524.github.io/ResearchStream/
 
-最新日报模板、首发核验和配图规则见 [机器人学习与操作日报规范](robot-manipulation-daily.md)。2026-10-07 用户进一步要求迁移为云端任务，北京时间每日 04:00 启动；云端配置状态见新版规范，下面保留 Work 投递接口的说明。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
+最新日报模板、首发核验和配图规则见 [机器人学习与操作日报规范](robot-manipulation-daily.md)。沿用现有云端任务，按 2026-10-08 的要求调整为北京时间每日 02:00 启动、目标 04:00 前完成发布；云端配置状态见新版规范。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
 
 ## Work 自动化的仓库投递指令
 
@@ -12,16 +12,16 @@
 
 公开版必须包含 YAML frontmatter：
 id: paperinsight-YYYY-MM-DD
-title: 今日首推论文标题
+title: 首推论文原名（不加日期、日报前缀或另拟副标题）
 abstract: 一句话说明本篇阅读的重点
 date: "YYYY-MM-DD"
 lang: zh
 topic: Robotics
-tags: [robot-manipulation, reinforcement-learning]
+tags: [robot-manipulation, paper-insight]
 series: Robot Manipulation Daily
 draft: false
 
-也可以使用更具体的 series，例如 RL for dexterous manipulation；按学习顺序组织时增加整数 order。不要仅凭示例给与正文无关的标签。生成后检查论文链接和事实依据；沿用当前论文阅读流程的核验要求。
+日报固定归入 Robot Manipulation Daily，按日期排列，不设置 order；更具体的任务和方法用 tags 分类。仅按正文实际方法增添 reinforcement-learning、vla、world-action-model、jepa 等标签，不能因覆盖领域宽泛而全部添加。title 与正文一级标题使用相同论文原名，日期仍保留在 date 和文件名中。生成后检查论文链接和依据，按新版规范保存并检查官方配图和公式渲染。
 
 同一天仅新增一个稳定 id 的日报；重复运行时先检查仓库，完全相同的文件跳过，已有但不同的文章不要直接覆盖。不要通过改文件名发布第二份同日重复日报。
 
@@ -36,14 +36,13 @@ draft: false
 ```yaml
 ---
 id: paperinsight-2026-10-08
-title: "今日论文标题"
+title: "首推论文原名"
 abstract: "用一句话说明今天的核心方法与阅读重点。"
 date: "2026-10-08"
 lang: zh
 topic: Robotics
-tags: [robot-manipulation]
-series: "RL for dexterous manipulation"
-order: 1
+tags: [robot-manipulation, paper-insight]
+series: Robot Manipulation Daily
 draft: false
 ---
 ```
