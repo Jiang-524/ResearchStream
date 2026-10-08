@@ -1,0 +1,4 @@
+ResearchStream GitHub connector diagnostic.
+Date: 2026-10-08
+Purpose: verify a harmless UTF-8 file write using the connected GitHub tool.
+This file is only on the diagnostic branch and is not website content.
