@@ -3,31 +3,30 @@
 目标仓库：https://github.com/Jiang-524/ResearchStream
 已发布站点：https://Jiang-524.github.io/ResearchStream/
 
-现有 Work 自动化负责每天读论文，不新增重复阅读任务。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
+最新日报模板、首发核验和配图规则见 [机器人学习与操作日报规范](robot-manipulation-daily.md)。按 2026-10-08 的要求改为独立云端任务“机器人操作研究日报”，北京时间每日 02:00 启动、目标 04:00 前完成发布，旧云端任务已暂停；真实任务 ID、配置及执行证据见新版规范。GitHub Actions 在 Markdown 提交后导入并发布；不需要购买域名或配置 OpenAI API Key。
 
-## 添加到现有 Work 自动化末尾的指令
+## Work 自动化的仓库投递指令
 
 ```text
-日报生成后，继续保存到 /home/jiangyingzhuo/paperInsight。
-同时把同一份 Markdown 保存到 ResearchStream 仓库的 inbox/paperinsight/YYYY-MM-DD_robot_manipulation_daily.md，并提交到 Jiang-524/ResearchStream 的 main 分支。这个文件就是公开发布的版本。
+日报生成后，直接将公开版 Markdown 保存到 ResearchStream 仓库的 inbox/paperinsight/YYYY-MM-DD_robot_manipulation_daily.md，并提交到 Jiang-524/ResearchStream 的 main 分支。这个文件就是公开发布的版本。
 
 公开版必须包含 YAML frontmatter：
 id: paperinsight-YYYY-MM-DD
-title: 今日首推论文标题
+title: 首推论文原名（不加日期、日报前缀或另拟副标题）
 abstract: 一句话说明本篇阅读的重点
 date: "YYYY-MM-DD"
 lang: zh
 topic: Robotics
-tags: [robot-manipulation, reinforcement-learning]
+tags: [robot-manipulation, paper-insight]
 series: Robot Manipulation Daily
 draft: false
 
-也可以使用更具体的 series，例如 RL for dexterous manipulation；按学习顺序组织时增加整数 order。不要仅凭示例给与正文无关的标签。生成后检查论文链接和事实依据；沿用当前论文阅读流程的核验要求。
+日报固定归入 Robot Manipulation Daily，按日期排列，不设置 order；更具体的任务和方法用 tags 分类。仅按正文实际方法增添 reinforcement-learning、vla、world-action-model、jepa 等标签，不能因覆盖领域宽泛而全部添加。title 与正文一级标题使用相同论文原名，日期仍保留在 date 和文件名中。生成后检查论文链接和依据，按新版规范保存并检查官方配图和公式渲染。
 
 同一天仅新增一个稳定 id 的日报；重复运行时先检查仓库，完全相同的文件跳过，已有但不同的文章不要直接覆盖。不要通过改文件名发布第二份同日重复日报。
 
 如果运行环境有本地仓库，先获取 main 的最新版本，在干净的独立工作目录中提交当天 inbox 文件并 push，不能把 agent_dev 的开发改动一并发布。不使用 force push。有冲突时停止发布并报告。
-如果仅有 GitHub 连接器，直接在上述仓库 main 分支创建当天 inbox 文件，不要提交其它文件。
+如果仅有 GitHub 连接器，在上述仓库 main 分支提交当天 inbox 文件及其实际引用的图片，不要提交无关文件。
 
 提交后查看 Build research journal 工作流：只有 build、deploy 都成功且发布链接可访问，才报告发布成功。若无 GitHub 写权限或部署失败，保留原 Markdown，清楚报告阻塞，不把“本地已保存”说成“网站已更新”。
 ```
@@ -37,14 +36,13 @@ draft: false
 ```yaml
 ---
 id: paperinsight-2026-10-08
-title: "今日论文标题"
+title: "首推论文原名"
 abstract: "用一句话说明今天的核心方法与阅读重点。"
 date: "2026-10-08"
 lang: zh
 topic: Robotics
-tags: [robot-manipulation]
-series: "RL for dexterous manipulation"
-order: 1
+tags: [robot-manipulation, paper-insight]
+series: Robot Manipulation Daily
 draft: false
 ---
 ```
@@ -76,5 +74,5 @@ Work 提交 inbox → Action 校验并导入 content/paperpost → 构建与测�
 
 ## TODO
 
-- 将上述指令加入你现有的 Work 阅读任务；该任务不在本地 Codex 自动化列表中，本轮没有修改它。
-- 验证下一次 Work 实际提交一天的新日报。当前验证的是历史日报导入与网站发布链路，不代表每日任务已经修改。
+- [x] 按新版规范配置并启用每日任务。
+- [ ] 验证首个定时运行实际提交一天的新日报。历史日报导入与模板构建检查不等同于真实定时运行验收。
