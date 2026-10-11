@@ -71,6 +71,6 @@ Files: README, CHANGELOG, public templates, two clearly labeled experiment demon
 - [x] Label all demonstration data as synthetic, keep actual user experiments empty; add two projects each with two experiments/multiple CSVs for verification.
 - [x] Run check, production build with project base, entire suite, browser interaction/mobile/offline/video checks and 100k-row comparison test.
 - [x] Request one independent whole-change review; address material findings and rerun affected checks.
-- [ ] Commit final verified changes; push `agent_dev` under repository authorization and verify its Actions result. Report reviewable branch and preview; do not claim main has deployed.
+- [x] Prepare final verified commits on `agent_dev`. Delivery checks push and Actions status under repository authorization; report the branch and preview without claiming main has deployed.
 
 Execution note: Tasks 2 and 3 were integrated in commit 92750f2 because the route, result component, index and browser controls are mutually dependent. Demonstration fixtures and templates were included there to keep the feature independently buildable; Task 4 contains documentation and final verification.

@@ -29,7 +29,8 @@ if(root) {
     const project=projects.find(p=>p.id===projectSelect.value),run=project?.experiments.find((r:any)=>r.id===runSelect.value),csv=run?.csvs.find((c:any)=>c.id===csvSelect.value),metric=csv?.metrics.find((m:any)=>m.id===metricSelect.value);
     return {project,run,csv,metric};
   };
-  const label=(p:any,r:any,c:any,m:any)=>`${p.title}${projects.filter(other=>other.title===p.title).length>1?` [${p.id}]`:''} · ${text('Run','实验')} ${number(r.number)}「${r.title}」 · CSV ${number(c.number,2)}「${c.title}」 · ${m.label}`;
+  const projectLabel=(p:any)=>`${p.title}${projects.filter(other=>other.title===p.title).length>1?` [${p.id}]`:''}`;
+  const label=(p:any,r:any,c:any,m:any)=>`${projectLabel(p)} · ${text('Run','实验')} ${number(r.number)}「${r.title}」 · CSV ${number(c.number,2)}「${c.title}」 · ${m.label}`;
   function fill(target:HTMLSelectElement,items:any[],name:(item:any)=>string) {
     const old=target.value;target.replaceChildren(...items.map(item=>new Option(name(item),item.id)));
     if(items.some(item=>item.id===old))target.value=old;
@@ -44,7 +45,7 @@ if(root) {
   const matchingCsvs=(p:any,r:any)=>r.csvs.filter((c:any)=>matchingMetrics(p,r,c).length);
   const matchingRuns=(p:any)=>p.experiments.filter((r:any)=>matchingCsvs(p,r).length);
   function populate(level=0) {
-    if(level===0)fill(projectSelect,projects.filter(p=>matchingRuns(p).length),p=>p.title+(p.demo?text(' [demo]',' [示例]'):''));
+    if(level===0)fill(projectSelect,projects.filter(p=>matchingRuns(p).length),p=>projectLabel(p)+(p.demo?text(' [demo]',' [示例]'):''));
     let {project,run,csv}=chosen();
     if(level<=1)fill(runSelect,project?matchingRuns(project):[],r=>`${number(r.number)} · ${r.title}`);
     ({project,run}=chosen());
@@ -124,6 +125,10 @@ if(root) {
   notes.setAttribute('aria-labelledby',tabs[0].id);element.setAttribute('aria-labelledby',tabs[1].id);
   tabs[0]?.parentElement?.setAttribute('role','tablist');notes.setAttribute('role','tabpanel');element.setAttribute('role','tabpanel');
   addEventListener('hashchange',()=>void activate());void activate();
-  document.addEventListener('languagechange',()=>{if(projects.length)populate();renderSelection();draw();});
+  document.addEventListener('languagechange',()=>{
+    if(projects.length)populate();
+    for(const curve of curves.values()){const [projectId,runId]=JSON.parse(curve.key);const project=projects.find(p=>p.id===projectId),run=project.experiments.find((r:any)=>r.id===runId);curve.name=label(project,run,curve.csv,curve.metric);}
+    renderSelection();draw();
+  });
   new MutationObserver(()=>{if(!element.hidden)draw();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 }
