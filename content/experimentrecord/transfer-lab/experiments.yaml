@@ -1,0 +1,102 @@
+# Synthetic demonstration data — not actual experiment results.
+experiments:
+  - id: baseline
+    number: 1
+    title: 原方法基线
+    date: 2026-01-01
+    kind: reproduction
+    status: completed
+    seed: 43
+    summary: 合成数据，仅演示记录和比较功能，不代表实际研究结果。
+    hardware: Demo only
+    dataset: Synthetic illustration
+    config: runs/baseline/config.yaml
+    csvs:
+      - id: evaluation
+        number: 1
+        title: 合成评估分数
+        path: runs/baseline/evaluation.csv
+        x:
+          column: iteration_count
+          label: 迭代次数
+          quantity: iteration
+          unit: iteration
+        metrics:
+          - id: score
+            column: evaluation/score
+            label: 合成分数
+            quantity: synthetic-score
+            unit: fraction
+          - id: elapsed
+            columnIndex: 3
+            label: 耗时
+            quantity: elapsed-time
+            unit: s
+      - id: loss
+        number: 2
+        title: 无表头损失曲线
+        path: runs/baseline/loss.csv
+        delimiter: ;
+        headerRow: null
+        dataStartRow: 1
+        x:
+          columnIndex: 1
+          label: 迭代次数
+          quantity: iteration
+          unit: iteration
+        metrics:
+          - id: loss
+            columnIndex: 2
+            label: 合成损失
+            quantity: synthetic-loss
+            unit: ""
+  - id: refined
+    number: 3
+    title: 调整配置的对照实验
+    date: 2026-01-01
+    kind: improvement
+    status: completed
+    seed: 43
+    summary: 合成数据，仅演示记录和比较功能，不代表实际研究结果。
+    hardware: Demo only
+    dataset: Synthetic illustration
+    config: runs/refined/config.yaml
+    csvs:
+      - id: evaluation
+        number: 1
+        title: 合成评估分数
+        path: runs/refined/evaluation.csv
+        x:
+          column: iteration_count
+          label: 迭代次数
+          quantity: iteration
+          unit: iteration
+        metrics:
+          - id: score
+            column: evaluation/score
+            label: 合成分数
+            quantity: synthetic-score
+            unit: fraction
+          - id: elapsed
+            columnIndex: 3
+            label: 耗时
+            quantity: elapsed-time
+            unit: s
+      - id: loss
+        number: 2
+        title: 无表头损失曲线
+        path: runs/refined/loss.csv
+        delimiter: ;
+        headerRow: null
+        dataStartRow: 1
+        x:
+          columnIndex: 1
+          label: 迭代次数
+          quantity: iteration
+          unit: iteration
+        metrics:
+          - id: loss
+            columnIndex: 2
+            label: 合成损失
+            quantity: synthetic-loss
+            unit: ""

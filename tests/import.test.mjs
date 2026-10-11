@@ -26,3 +26,24 @@ test('import round trip copies Markdown + referenced image and refuses duplicate
     assert.equal(duplicate.status, 1); assert.match(duplicate.stderr, /Duplicate/);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });
+
+test('experiment import preserves the manifest and only declared assets', () => {
+  const directory = mkdtempSync(path.join(tmpdir(), 'rs-experiment-import-'));
+  try {
+    const source = path.join(directory, 'input'); mkdirSync(source);
+    writeFileSync(path.join(source,'index.md'),'---\nid: test-project\ntitle: Test project\nabstract: Import real mapped CSV\ndate: "2026-10-12"\nlang: zh\nexperimentKinds: [reproduction]\nstatus: completed\n---\nMethod and reasons.');
+    writeFileSync(path.join(source,'data.csv'),'iteration,result\n1,3\n2,5');
+    writeFileSync(path.join(source,'config.yaml'),'seed: 42');
+    writeFileSync(path.join(source,'unreferenced.txt'),'DO NOT PUBLISH');
+    const manifest={experiments:[{id:'baseline',number:3,title:'Baseline',date:'2026-10-12',kind:'reproduction',status:'completed',config:'config.yaml',csvs:[{id:'evaluation',number:2,title:'Evaluation',path:'data.csv',x:{column:'iteration',label:'Iteration',quantity:'iteration',unit:'count'},metrics:[{id:'result',column:'result',label:'Result',quantity:'score',unit:''}]}]}]};
+    writeFileSync(path.join(source,'experiments.yaml'),JSON.stringify(manifest));
+    const args=[script,'--source',path.join(source,'index.md'),'--collection','experimentrecord','--slug','test-project'];
+    const result=spawnSync(process.execPath,args,{cwd:directory,encoding:'utf8'});
+    assert.equal(result.status,0,result.stderr);
+    const target=path.join(directory,'content/experimentrecord/test-project');
+    assert.equal(readFileSync(path.join(target,'data.csv'),'utf8'),'iteration,result\n1,3\n2,5');
+    assert.ok(existsSync(path.join(target,'config.yaml')));
+    assert.deepEqual(JSON.parse(readFileSync(path.join(target,'experiments.yaml'),'utf8')),manifest);
+    assert.equal(existsSync(path.join(target,'unreferenced.txt')),false);
+  } finally { rmSync(directory,{recursive:true,force:true}); }
+});

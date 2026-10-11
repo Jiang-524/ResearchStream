@@ -10,6 +10,8 @@ const schema = z.object({
   topic: z.string().default('Notes'), tags: z.array(z.string()).default([]),
   draft: z.boolean().default(false), demo: z.boolean().default(false),
   series: z.string().optional(), order: z.number().optional(),
+  experimentKinds: z.array(z.enum(['reproduction', 'improvement'])).optional(),
+  status: z.enum(['planned', 'running', 'completed', 'blocked']).optional(),
   translationKey: z.string().optional(), source: z.string().optional(),
   paper: z.object({ title: z.string().optional(), authors: z.array(z.string()).optional(), url: z.url().optional() }).optional(),
 }).superRefine((data, ctx) => {
@@ -20,4 +22,4 @@ const collection = (name: string) => defineCollection({
   loader: glob({ pattern: '**/index.md', base: `./content/${name}`, generateId: ({ entry }) => entry.replace(/\/index\.md$/, '') }),
   schema,
 });
-export const collections = { paperpost: collection('paperpost'), learningwall: collection('learningwall'), misc: collection('misc') };
+export const collections = { paperpost: collection('paperpost'), learningwall: collection('learningwall'), experimentrecord: collection('experimentrecord'), misc: collection('misc') };

@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import I18n from '../../components/I18n.astro';
+import Archive from '../../components/Archive.astro';
+import { allEntries, url } from '../../lib/content';
+import '../../styles/experiments.css';
+const entries = (await allEntries()).filter(e=>e.collection==='experimentrecord').sort((a,b)=>(b.data.updated || b.data.date).localeCompare(a.data.updated || a.data.date));
+---
+<Base title="experimentRecord" active="experimentrecord" description="方法复现、改进过程与可交互的实验结果记录。">
+  <header class="section-header experiment-heading"><div><span class="eyebrow">THE EXPERIMENT NOTEBOOK</span><h1>experimentRecord<span class="accent-dot">.</span></h1><p><I18n en="Every run has a reason. Every result leaves a trace." zh="记下每一步的理由，让每一次实验有迹可循。"/></p></div><a class="outline-button" href={url('templates/experiment-record/index.md')} download><I18n en="Notebook template" zh="下载记录模板"/> ↓</a></header>
+  <div class="experiment-intro"><span><I18n en="METHOD → REPRODUCE → REFINE" zh="理解方法 → 复现验证 → 改进探索"/></span><p><I18n en="Method notebooks, reproducible configurations, and curves you can compare across projects." zh="方法主笔记、可追溯的配置，以及能跨项目对比的实验曲线。"/></p></div>
+  <Archive entries={entries} experiments/>
+</Base>

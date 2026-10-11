@@ -1,0 +1,44 @@
+# Copy next to index.md. No experiment is claimed until you add an actual run.
+experiments: []
+
+# Replace the empty list above with real run entries using this structure:
+# experiments:
+#   - id: baseline-seed42           # Stable ID; do not rename/reuse after publication.
+#     number: 1                     # Explicit project-local number; gaps are allowed.
+#     title: 原方法基线
+#     date: "2026-10-12"
+#     kind: reproduction            # reproduction | improvement
+#     status: completed             # planned | running | completed | blocked
+#     summary: 如实填写设置、目的和观察，不要编造结论。
+#     seed: 42
+#     commit: actual-code-commit
+#     hardware: actual-hardware
+#     dataset: actual-dataset-version
+#     config: runs/baseline-seed42/config.yaml
+#     csvs:
+#       - id: evaluation
+#         number: 1                 # Stable within this run.
+#         title: 评估指标
+#         path: runs/baseline-seed42/evaluation.csv
+#         delimiter: ","
+#         headerRow: 1              # Logical CSV record, 1-based; null = no header.
+#         dataStartRow: 2           # First logical data record, 1-based.
+#         x:
+#           column: your_actual_x_column
+#           # OR columnIndex: 1    # 1-based; use for duplicate/no headers.
+#           # OR rowNumber: true   # Data record index starting at 1.
+#           label: 训练迭代次数
+#           quantity: iteration    # Shared semantic key across comparable projects.
+#           unit: iteration
+#         metrics:
+#           - id: success
+#             column: your_actual_y_column
+#             # OR columnIndex: 2
+#             label: 成功率
+#             quantity: success-rate
+#             unit: fraction       # Use '%' for 0–100; never silently mix scales.
+#     videos:
+#       - title: 实际运行视频
+#         src: runs/baseline-seed42/rollout.mp4
+#         # poster: assets/poster.jpg
+#         caption: 场景、实验编号、成功和失败条件。

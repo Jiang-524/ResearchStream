@@ -1,0 +1,46 @@
+---
+import I18n from './I18n.astro';
+interface Props { project: any; }
+const {project} = Astro.props;
+const labels: Record<string,[string,string]> = {reproduction:['Reproduction','复现'],improvement:['Improvement','改进'],planned:['Planned','待开始'],running:['Running','进行中'],completed:['Completed','已完成'],blocked:['Blocked','待解决']};
+---
+<section id="results" data-experiment-results data-project={project.id} aria-label="Experiment results / 实验结果">
+  <div class="experiment-section-title"><div><span class="eyebrow">EXPERIMENT LOG</span><h2><I18n en="A record of every run." zh="每次运行，都有记录。"/></h2></div><span class="run-count">{String(project.experiments.length).padStart(2,'0')} <I18n en="EXPERIMENTS" zh="次实验"/></span></div>
+  {project.experiments.length===0 && <p class="experiment-empty"><I18n en="No runs recorded yet. Add experiments.yaml alongside this notebook to get started." zh="还没有实验结果。在主笔记旁添加 experiments.yaml，即可开始记录。"/></p>}
+  <div class="experiment-runs">
+    {project.experiments.map((run:any)=><details class="run-card" id={`run-${run.id}`}>
+      <summary><span class="run-number">{String(run.number).padStart(3,'0')}</span><span class="run-title">{run.title}<small>{run.date} · {run.csvs.length} CSV</small></span><span class:list={['experiment-badge',run.kind]}><I18n en={labels[run.kind][0]} zh={labels[run.kind][1]}/></span><span class="run-status"><I18n en={labels[run.status][0]} zh={labels[run.status][1]}/></span><span aria-hidden="true">＋</span></summary>
+      <div class="run-body"><p>{run.summary}</p><dl class="run-metadata">{[['Seed',run.seed],['Commit',run.commit],['Hardware / 硬件',run.hardware],['Dataset / 数据集',run.dataset]].filter(([,value])=>value!==undefined).map(([label,value])=><div><dt>{label}</dt><dd>{String(value)}</dd></div>)}</dl>
+      {run.configUrl && <a class="text-link" href={run.configUrl} download><I18n en="Download configuration" zh="下载实验配置"/> ↓</a>}
+      <div class="run-files">{run.csvs.map((csv:any)=><div class="run-file"><span class="file-number">CSV {String(csv.number).padStart(2,'0')}</span><div><strong>{csv.title}</strong><small>{csv.metrics.map((m:any)=>m.label).join(' · ')}</small></div><a href={csv.url} download class="text-link">CSV ↓</a><button type="button" class="outline-button" data-compare-run={run.id} data-compare-csv={csv.id}><I18n en="Compare" zh="加入对比"/> ＋</button></div>)}</div>
+      {run.videos.length>0 && <div class="experiment-videos">{run.videos.map((video:any)=><figure><video controls playsinline preload="metadata" poster={video.posterUrl} aria-label={video.title}><source src={video.url}/><a href={video.url}>{video.title}</a></video><figcaption><strong>{video.title}</strong><p>{video.caption}</p></figcaption></figure>)}<p class="experiment-hint"><I18n en="Videos load on demand and require a connection." zh="视频按需加载，需要联网播放。"/></p></div>}
+      </div>
+    </details>)}
+  </div>
+  <section class="comparison-workspace" id="compare" aria-labelledby="comparison-title">
+    <div class="experiment-section-title"><div><span class="eyebrow">COMPARE & UNDERSTAND</span><h2 id="comparison-title"><I18n en="Data comparison" zh="数据对比"/></h2></div><span class="comparison-mark" aria-hidden="true">∿</span></div>
+    <p class="experiment-hint"><I18n en="Bring curves from any project into one workspace. Sources stay traceable; incompatible axes get separate panels." zh="选择任意项目、实验和 CSV 的曲线。保留完整来源，不同坐标含义或单位的数据自动分图。"/></p>
+    <div class="comparison-picker">
+      <label class="source-search"><span><I18n en="Find a source" zh="查找数据源"/></span><input type="search" data-source-search placeholder="项目、实验编号、CSV、指标…" data-placeholder-en="Project, run number, CSV, metric…" data-placeholder-zh="项目、实验编号、CSV、指标…"/></label>
+      <div class="source-grid">
+        <label><span><I18n en="Project" zh="项目"/></span><select data-source-project aria-label="Project / 项目"></select></label>
+        <label><span><I18n en="Experiment" zh="实验"/></span><select data-source-run aria-label="Experiment / 实验"></select></label>
+        <label><span>CSV</span><select data-source-csv aria-label="CSV"></select></label>
+        <label><span><I18n en="Metric" zh="指标"/></span><select data-source-metric aria-label="Metric / 指标"></select></label>
+        <button type="button" class="outline-button add-curve" data-add-curve disabled><I18n en="Add curve" zh="添加曲线"/> ＋</button>
+      </div>
+    </div>
+    <div class="selected-curves" data-selected-curves aria-label="Selected curves / 已选曲线"></div>
+    <div class="comparison-controls">
+      <label class="smoothing-control"><span><I18n en="EMA smoothing" zh="EMA 平滑"/> <output data-smoothing-value>0.00</output></span><input type="range" min="0" max="0.99" step="0.01" value="0" data-smoothing aria-label="EMA smoothing / EMA 平滑"/></label>
+      <label class="raw-toggle"><input type="checkbox" data-show-raw checked/><I18n en="Show raw data" zh="显示原始曲线"/></label>
+      <button type="button" class="text-link" data-reset-zoom><I18n en="Reset zoom" zh="重置缩放"/> ↺</button>
+      <button type="button" class="text-link" data-clear-curves><I18n en="Clear curves" zh="清空曲线"/></button>
+    </div>
+    <p class="experiment-hint"><I18n en="0 = original data. Smoothing changes the display only. Drag the range slider or use box zoom; point values are never interpolated." zh="0 表示原始数据。平滑仅改变展示；拖动范围条或使用框选工具缩放，悬停数值不做插值。"/></p>
+    <p data-comparison-status class="comparison-status" role="status" aria-live="polite"><I18n en="Open experiment results to load the available sources." zh="打开实验结果后加载可选数据源。"/></p>
+    <div data-chart-panels class="chart-panels"></div>
+    <noscript><p class="experiment-empty"><I18n en="Interactive comparisons require JavaScript. You can still read the notes and download CSV files above." zh="交互图表需要 JavaScript。仍可阅读笔记并下载上面的 CSV 文件。"/></p></noscript>
+  </section>
+</section>
+<script>import '../scripts/experiments';</script>

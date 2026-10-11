@@ -72,10 +72,11 @@ if (archive) {
     });
     for (const item of ordered) {
       const match = matches?.get(item.dataset.key!);
-      const visible = (!matches || !!match) && ['topic','month','lang','section','series','tag'].every(filter => {
+      const visible = (!matches || !!match) && ['topic','month','lang','section','series','tag','kind','status'].every(filter => {
         const selected = params.get(filter); if (!selected) return true;
         if (filter === 'month') return item.dataset.date!.startsWith(selected);
         if (filter === 'tag') return JSON.parse(item.dataset.tags!).includes(selected);
+        if (filter === 'kind') return JSON.parse(item.dataset.kind || '[]').includes(selected);
         return item.dataset[filter] === selected;
       });
       item.hidden = !visible; if (visible) count++;

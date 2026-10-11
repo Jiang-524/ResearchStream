@@ -3,7 +3,8 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import * as pagefind from 'pagefind';
 import { readSourceEntries, walk } from './source-content.mjs';
-import { markdownImages, mediaUrl, basePath } from '../src/lib/content-tools.mjs';
+import { mediaUrl, basePath } from '../src/lib/content-tools.mjs';
+import { entryAssets } from './entry-assets.mjs';
 
 const output = path.resolve('dist');
 const base = basePath(process.env.BASE_PATH);
@@ -27,12 +28,12 @@ const readingAssets = {};
 for (const entry of readSourceEntries().filter(e => !e.data.draft)) {
   const page = `${base}${entry.collection}/${entry.slug}/`;
   readingAssets[page] = [];
-  for (const image of markdownImages(entry.body).filter(image => !/^(https?:|data:|\/)/.test(image))) {
-    const targetUrl = mediaUrl(entry.collection, entry.slug, image, '/');
+  for (const asset of entryAssets(entry,base)) {
+    const targetUrl = mediaUrl(entry.collection, entry.slug, asset.relative, '/');
     const target = path.join(output, decodeURIComponent(targetUrl));
     mkdirSync(path.dirname(target), { recursive: true });
-    copyFileSync(path.resolve(path.dirname(entry.file), image), target);
-    readingAssets[page].push(mediaUrl(entry.collection, entry.slug, image, base));
+    copyFileSync(asset.file, target);
+    if (!/\.(mp4|webm)$/i.test(asset.relative)) readingAssets[page].push(asset.url);
   }
 }
 
@@ -42,7 +43,7 @@ version.update(readFileSync(new URL(import.meta.url)));
 for (const file of files) version.update(path.relative(output, file)).update(readFileSync(file));
 const cacheName = `researchstream-${createHash('sha256').update(base).digest('hex').slice(0,6)}-${version.digest('hex').slice(0, 12)}`;
 const prefix = cacheName.slice(0, -12);
-const core = ['', 'paperpost/', 'learningwall/', 'misc/', 'search/', 'series/', 'write/', 'offline/', 'entries.json', 'favicon.svg'].map(p => base + p);
+const core = ['', 'paperpost/', 'learningwall/', 'experimentrecord/', 'misc/', 'search/', 'series/', 'write/', 'offline/', 'entries.json', 'experiments.json', 'favicon.svg'].map(p => base + p);
 for (const file of files) {
   const relative = path.relative(output, file).split(path.sep).join('/');
   if (relative.startsWith('_astro/') || relative.startsWith('pagefind/')) core.push(base + relative);
@@ -53,17 +54,18 @@ const PREFIX = ${JSON.stringify(prefix)};
 const BASE = ${JSON.stringify(base)};
 const CORE = ${JSON.stringify(core)};
 const READING_ASSETS = ${JSON.stringify(readingAssets)};
+const PUBLIC_ASSETS = new Set(Object.values(READING_ASSETS).flat());
 self.addEventListener('install', event => event.waitUntil((async () => {
   const savedPages = new Set();
   for (const name of await caches.keys()) {
     if (!name.startsWith(PREFIX) || name === CACHE) continue;
     for (const request of await (await caches.open(name)).keys()) {
       const path = new URL(request.url).pathname;
-      if (Object.hasOwn(READING_ASSETS, path)) savedPages.add(path);
+      if (Object.hasOwn(READING_ASSETS, path) || PUBLIC_ASSETS.has(path)) savedPages.add(path);
     }
   }
   const urls = new Set(CORE);
-  for (const page of savedPages) { urls.add(page); READING_ASSETS[page].forEach(url => urls.add(url)); }
+  for (const page of savedPages) { urls.add(page); (READING_ASSETS[page] || []).filter(url => !url.endsWith('.csv')).forEach(url => urls.add(url)); }
   const cache = await caches.open(CACHE);
   // Refresh current public versions before activating; failed downloads retain the old worker.
   await cache.addAll([...urls]);
@@ -74,21 +76,21 @@ self.addEventListener('message', event => {
   if (event.data?.type !== 'CACHE_READING') return;
   event.waitUntil(caches.open(CACHE).then(cache => Promise.all(event.data.urls.map(async raw => {
     const url = new URL(raw, self.location.origin);
-    if (url.origin !== self.location.origin || !url.pathname.startsWith(BASE)) return;
+    if (url.origin !== self.location.origin || (!Object.hasOwn(READING_ASSETS,url.pathname) && !PUBLIC_ASSETS.has(url.pathname))) return;
     url.search = ''; url.hash = '';
     try { const response = await fetch(url); if (response.ok) await cache.put(url, response); } catch {}
   }))));
 });
 self.addEventListener('fetch', event => {
   const request = event.request, url = new URL(request.url);
-  if (request.method !== 'GET' || url.origin !== self.location.origin || !url.pathname.startsWith(BASE) || url.pathname.endsWith('/sw.js')) return;
+  if (request.method !== 'GET' || url.origin !== self.location.origin || !url.pathname.startsWith(BASE) || url.pathname.endsWith('/sw.js') || /\\.(mp4|webm)$/i.test(url.pathname) || request.headers.has('range')) return;
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
     // Pagefind adds a timestamp to its manifest URL; its cached content is path-based.
     const key = request.mode === 'navigate' || url.pathname === BASE + 'pagefind/pagefind-entry.json' ? new URL(url.pathname, url.origin).href : request;
     try {
       const response = await fetch(request);
-      if (response.ok) await cache.put(key, response.clone());
+      if (response.ok && (CORE.includes(url.pathname) || Object.hasOwn(READING_ASSETS,url.pathname) || PUBLIC_ASSETS.has(url.pathname))) await cache.put(key, response.clone());
       return response;
     } catch {
       const saved = await cache.match(key);

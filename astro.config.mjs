@@ -5,9 +5,9 @@ import rehypeKatex from 'rehype-katex';
 import remarkImages from './src/lib/remark-images.mjs';
 import { unified, rehypeShiki } from '@astrojs/markdown-remark';
 import { readSourceEntries } from './scripts/source-content.mjs';
-import { markdownImages, mediaUrl } from './src/lib/content-tools.mjs';
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
+import { entryAssets } from './scripts/entry-assets.mjs';
 
 const highlighting = { themes: { light: 'github-light', dark: 'github-dark' }, defaultColor: false };
 
@@ -21,10 +21,10 @@ export default defineConfig({
       const pathname = new URL(req.url || '/', 'http://localhost').pathname;
       if (!pathname.includes('/media/')) return next();
       for (const entry of readSourceEntries().filter(e => !e.data.draft)) {
-        for (const image of markdownImages(entry.body).filter(src => !/^(https?:|data:|\/)/.test(src))) {
-          if (mediaUrl(entry.collection, entry.slug, image, process.env.BASE_PATH) !== pathname) continue;
-          const file = path.resolve(path.dirname(entry.file), image);
-          const types = { '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif' };
+        for (const asset of entryAssets(entry,process.env.BASE_PATH)) {
+          if (asset.url !== pathname) continue;
+          const file = asset.file;
+          const types = { '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.csv':'text/csv; charset=utf-8', '.mp4':'video/mp4', '.webm':'video/webm', '.yaml':'text/plain; charset=utf-8' };
           res.setHeader('Content-Type', types[path.extname(file)] || 'application/octet-stream');
           createReadStream(file).on('error', () => { res.statusCode = 404; res.end(); }).pipe(res); return;
         }

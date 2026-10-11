@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/experiments.css';
 import '@fontsource/inter/latin-400.css';
 import '@fontsource/inter/latin-500.css';
 import '@fontsource/inter/latin-600.css';
@@ -11,7 +12,7 @@ import Icon from '../components/Icon.astro';
 import { base, url } from '../lib/content';
 interface Props { title?: string; description?: string; active?: string; }
 const { title = 'Read. Think. Keep a trace.', description = 'A personal journal of research, learning, and ideas in progress. 记录论文、学习与思考。', active = 'overview' } = Astro.props;
-const nav = [['overview', '', 'Overview'], ['paperpost', 'paperpost/', 'PaperPost'], ['learningwall', 'learningwall/', 'LearningWall'], ['misc', 'misc/', 'Misc.']];
+const nav = [['overview', '', 'Overview'], ['paperpost', 'paperpost/', 'PaperPost'], ['learningwall', 'learningwall/', 'LearningWall'], ['experimentrecord', 'experimentrecord/', 'experimentRecord'], ['misc', 'misc/', 'Misc.']];
 ---
 <!doctype html>
 <html lang="zh-CN" data-lang="zh" data-theme="light">

@@ -1,10 +1,10 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { assertUniqueIds, publishedEntries, firstContentImage, mediaUrl, readingMinutes } from './content-tools.mjs';
 import { seriesSlug } from './discovery.mjs';
-export type Entry = CollectionEntry<'paperpost' | 'learningwall' | 'misc'>;
+export type Entry = CollectionEntry<'paperpost' | 'learningwall' | 'experimentrecord' | 'misc'>;
 export const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 export const url = (path = '') => base + path.replace(/^\//, '');
-export const sectionNames = { paperpost: 'PaperPost', learningwall: 'LearningWall', misc: 'Misc.' };
+export const sectionNames = { paperpost: 'PaperPost', learningwall: 'LearningWall', experimentrecord: 'experimentRecord', misc: 'Misc.' };
 export const entryUrl = (entry: Entry) => url(`${entry.collection}/${entry.id}/`);
 export const seriesUrl = (name: string) => url(`series/${seriesSlug(name)}/`);
 export const thumbnail = (entry: Entry) => {
@@ -13,7 +13,7 @@ export const thumbnail = (entry: Entry) => {
 };
 export const minutes = (entry: Entry) => readingMinutes(entry.body || '');
 export async function allEntries(): Promise<Entry[]> {
-  const entries = (await Promise.all([getCollection('paperpost'), getCollection('learningwall'), getCollection('misc')])).flat();
+  const entries = (await Promise.all([getCollection('paperpost'), getCollection('learningwall'), getCollection('experimentrecord'), getCollection('misc')])).flat();
   assertUniqueIds(entries);
   return publishedEntries(entries);
 }
