@@ -1,0 +1,172 @@
+---
+name: exp-record
+description: Use when documenting a local research reproduction or method improvement in process.md, or publishing its experiment notes, CSV results and selected videos to Jiang-524/ResearchStream experimentRecord.
+---
+
+# ExpRecord — 本地实验记录与 ResearchStream 发布
+
+`process.md` 是实验代码项目中的主记录，ResearchStream 是它的发布副本。先让本地记录完整、可复现、可追溯，再发布完整笔记和真实结果；不要只把方法说明补在网站里，也不要把原文塞进代码围栏代替正常文章。
+
+本文件是可直接交给任何 AI 阅读的 Markdown 技能，文件名按约定保留为 `ExpRecord.skil`，不是二进制压缩包。仓库的 `.agents/skills/exp-record/SKILL.md` 提供标准发现入口。所有下述仓库相对路径均相对于 **ResearchStream checkout 根目录**，不要误认为实验代码目录。
+
+## 开始前：找到两套目录
+
+| 对象 | 约定 |
+| --- | --- |
+| 实验代码项目 | 记录项目的真实根目录、执行机器/环境和工作目录；不假定与网站在同一机器 |
+| 本地主笔记 | `<实验项目根>/process.md`，后续实验持续追加到同一方法的记录 |
+| 网站仓库 | `https://github.com/Jiang-524/ResearchStream`；定位本地 checkout 并检查 remote/分支 |
+| 网站笔记 | `content/experimentrecord/<stable-slug>/index.md` |
+| 运行清单 | 同一目录的 `experiments.yaml`，由它生成实验、CSV、视频索引 |
+
+先读实验项目已有的 `AGENTS.md`、`process.md`、代码和运行产物；再读网站的 [coding_protocal.md](coding_protocal.md) 与 [README 的 experimentRecord 规范](README.md#experimentrecord给自己和本地-ai-的实验记录规范)。没有找到项目/运行结果时，报告缺失项，不把演示数据当作用户实验。
+
+用户只要求记录时，完成本地记录即可；用户要求上传/上线时，在其授权范围内继续发布，不为每个常规步骤重复请求确认。技能本身不授权公开尚未指定的私密源码、数据集或整台机器文件。
+
+## 一、本地 process.md：代码级主复现笔记
+
+新项目从 [process.md 模板](public/templates/experiment-record/process.md) 开始，保存到实验代码项目根目录。已有记录增量补齐，不覆盖旧日志。将模板日期换成实际日期；时间使用实际时区，推荐 `YYYY-MM-DD HH:mm:ss +08:00`。历史时间无法确定时写未知，不能用本次编辑时间冒充实验时间。
+
+主笔记必须形成以下可读结构：
+
+1. **项目与运行位置**：方法/论文/版本和来源、原始代码仓库及完整 commit、分支/本地修改状态、实验代码绝对路径、实际运行机器别名、cwd、解释器/环境、依赖、硬件、数据集版本和输出目录。Windows、WSL、远程主机分别写清，路径不混用。
+2. **非常详细的方法整体介绍**：问题定义与假设、输入输出、总体框图和数据流、每个核心模块的目的与计算、重要公式/张量形状、超参数作用、训练目标、训练/评估/推理的差别。把“论文这样说”“源码实际这样实现”“自己的理解/猜测”区分开。描述详细到另一名 AI 能据此找到并解释真正的实现，而不是重写论文摘要。
+3. **重点代码索引**：表格列出方法部件 → 可点击的本地文件 → 函数/类 → 已核实的行号与 commit → 输入/输出 → 方法中的作用 → 可公开的 commit permalink。覆盖训练入口、环境/数据、模型/核心机制、损失/优化、评估指标/导出。再解释真实调用链和关键代码片段；不要粘贴整个源码树代替解释。行号与实际 checkout 对齐，同时保留符号名以免后续行号漂移失去定位。
+4. **复现和修改的每一步**：每条包含执行日期/时间、当时问题、改了哪个文件/符号/配置及前后行为、**为什么改**、在哪运行的完整命令、关联实验编号、实际输出与核验、代码/配置快照和下一步。安装、准备数据、失败、修复和回退也记录；仅计划执行的命令必须标为计划。已记录历史不悄悄改成最终成功版本。
+5. **重要实验与结果**：稳定编号/ID、复现或改进、目的/对照变量、开始与结束时间/耗时、commit/patch、配置、seed、硬件、数据版本、任务/评估协议、指标定义/单位/样本数、原始 CSV/日志/视频链接、结果与限制。保留关键失败和不支持假设的结果；有日志证据才填数值，平滑图不能代替原始统计。
+6. **结果索引、结论与 TODO**：从主笔记定位所有重要本地结果；区分事实与推测，列出未解决问题和具体下一步；保留网站 slug、导出映射和发布回执。
+
+### 本地文件链接与公开网页
+
+`process.md` 要有章节目录和代码/产物索引。本地文件链接的文字直接写可复制的路径；实际目标采用该机器正确的 URI，例如：
+
+```markdown
+[本地：src/train.py](file:///work/GripLab/src/train.py) — main()，L120–168，commit <真实SHA>
+[本地：Windows训练入口](file:///E:/GripLab/src/train.py)
+[本地：实验002原始数据](file:///work/GripLab/logs/seed43/eval.csv)
+[公开代码](https://github.com/<owner>/<repo>/blob/<真实SHA>/src/train.py#L120-L168)
+```
+
+上面是语法示例，必须换成实际存在且已核实的路径。空格等字符做 URI 编码；本地编辑器对 `file:` 链接的打开能力取决于宿主。需要精确跳到行时可按用户编辑器补充其 deep link，同时保留普通路径、符号和行号；不要宣称所有编辑器都能识别 `#L120`。
+
+**HTTPS 网站不能读取读者电脑的文件。** 当前网页清理器不会执行 `file:`/编辑器协议，通常只留下链接文字；这应被标注为“仅本地”，而不是假装网页可点。可公开代码同时提供固定 commit 的 GitHub 链接，不上传整个代码仓库。未公开代码保留本地路径及必要解释，不编造公网链接。
+
+不要把 `./src/train.py`、`./logs/eval.csv` 当成可在网站正常访问的链接：相对路径会基于网页地址解析。新笔记用上面的本地 URI + 公开替代链接；已有笔记中的此类链接在本地源稿中规范化并记录这一编辑。如果用户明确要求连链接字节也完全不变，则保留并说明这些链接只供本地使用；公开 CSV/视频入口由清单提供。不要为让本地链接可点而放开网页脚本/协议清理。
+
+## 二、准备完整文章与可发布附件
+
+本地 `process.md` 从一开始使用网站 frontmatter（见模板）：`id/title/abstract/date/lang` 必填，设置合适的 `topic/tags/series/experimentKinds/status`，追加实验后更新 `updated`。`experimentKinds` 为 `reproduction`/`improvement` 的集合；项目状态不等于最近一次运行的状态。已有项目保持 ID、slug、首次 date 和历史不变。
+
+正文直接作为方法笔记使用，不重新总结、不删掉失败步骤、不转换成 Markdown 代码块。源稿已带有效 frontmatter 时，可以按字节复制为网站 `index.md`；旧原稿没有 frontmatter 时只补元数据，保留正文。已有网站历史比本地多时，先把差异合回本地 `process.md`，再同步，不能盲目覆盖。
+
+为新项目在本地创建一个临时发布目录（例如 `<代码项目>/.researchstream/<slug>/`，不要把它作为真实运行输出目录）：
+
+```text
+<发布目录>/
+  process.md                 # 本地完整主笔记副本；导入后文件名为 index.md
+  experiments.yaml           # 参照现有已发布历史增量维护
+  assets/method.svg           # 正文实际引用图片，保持相对路径不变
+  runs/seed43/
+    evaluation.csv           # 原始数据副本，不改数值、列名或精度
+    config.yaml              # 实际运行配置快照（有则提供）
+    typical-success.webm     # 最有代表性的片段（有则提供）
+    typical-failure.webm     # 有解释价值时再选第二个
+```
+
+图片必须位于主笔记同目录或子目录；正文图片的相对路径必须能在发布目录内找到。CSV、配置和视频通过清单声明，不会因为文件存在就自动发布。不要将 `../`、外部目录符号链接、绝对磁盘路径放进清单。代码链接不等于图片/附件声明。
+
+记录“本地原始路径 → 实验号/CSV号 → 网站目标相对路径”的映射。只复制本次选择的真实附件，不递归上传整个 logs、模型权重、训练数据、缓存或凭据。源码/配置中的 token 不进入笔记或公开附件；必要的删改应说明而非伪装为原样文件。
+
+## 三、experiments.yaml：编号、CSV 映射与视频
+
+从 [清单模板](public/templates/experiment-record/experiments.yaml) 读取完整结构；[README](README.md) 解释浏览器行为；必要时参照 `content/experimentrecord/curve-lab/experiments.yaml` 的**合成示例结构**，不复制其结果作为真实数据。
+
+- 实验 `id/number` 在项目内唯一；CSV `id/number` 在该实验内唯一；指标 ID 在该 CSV 内唯一。ID 使用小写字母、数字和短横线。
+- 查阅已发布清单和已有删除记录后分配下一个未使用编号。旧编号和 ID 不重排、不复用、不用新数据覆盖旧 CSV；seed43 是新运行就新增运行。新的 CSV 有新编号，同一运行可有多个 CSV。
+- `kind` 为 `reproduction` 或 `improvement`；更换 seed 复跑不自动算方法改进。状态只能是 `planned/running/completed/blocked`。实际运行日期填写带引号的 `YYYY-MM-DD`；详细开始/结束时间放 process.md。
+- 先打开 CSV 核实真实表头、分隔符、说明行和数值，再配置 `headerRow/dataStartRow`（从 1 开始的逻辑 CSV 记录）与 `x/metrics`。列映射三选一：`column` 实际名称、`columnIndex` 从 1 开始列号、仅 X 可用的 `rowNumber: true`；无表头设 `headerRow: null`。不要猜 step/reward。
+- `label` 是展示名，`quantity` 是物理/统计含义的共享键，`unit` 是真实单位。X/Y 的 quantity 与 unit 都一致才同图；确认与目标比较项目使用相同语义键。0–100 成功率用 `%`，0–1 用 `fraction`，不能靠修改 unit 来伪造同尺度数据。
+
+以下例子仅在 CSV **确有** `interactions,eval/success_pct,seconds` 且成功率取值为 0–100 时适用，替换成实际运行：
+
+```yaml
+experiments:
+  - id: seed43
+    number: 2
+    title: 原方法复现 seed43
+    date: "2026-10-12"
+    kind: reproduction
+    status: completed
+    seed: 43
+    csvs:
+      - id: evaluation
+        number: 1
+        title: 成功率评估
+        path: runs/seed43/evaluation.csv
+        headerRow: 1
+        dataStartRow: 2
+        x:
+          column: interactions
+          label: 环境交互次数
+          quantity: environment-interaction
+          unit: count
+        metrics:
+          - id: success
+            column: eval/success_pct
+            label: 成功率
+            quantity: success-rate
+            unit: "%"
+    videos:
+      - title: 典型成功案例
+        src: runs/seed43/typical-success.webm
+        caption: 填真实场景、seed/episode、判定条件、原片及选择原因。
+```
+
+有真实配置时声明 `config: runs/seed43/config.yaml`；有视频封面时加 `poster` 的项目内路径。额外的 `commit/hardware/dataset/summary` 只填写已核实的值。没有视频、配置或结果时省略对应字段或保留空列表，不创建假的附件。
+
+### 视频选择与显示
+
+默认每批发布挑**最后重要实验中最典型的 1–2 个**，不是给每个历史实验批量补两个。结合运行记录看内容、确认所属实验和任务；一般选一个典型结果，第二个可展示有解释价值的失败/对照。写明场景、seed/episode、时间段、成功/失败条件和选择原因，避免用精彩片段代替整体统计。
+
+保留本地原视频；需压缩/转码时生成发布副本并记下来源。使用浏览器可播放的 WebM 或 MP4，核验解码、时长、体积和播放；当前内嵌预览已验证 WebM。小文件可同仓库发布；单文件接近或超过 GitHub 普通仓库 [100 MiB 限制](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)时，先压缩、选有意义的短片或使用用户已授权的 HTTPS 视频直链，不默认改用 LFS。普通视频网页/分享页 URL 不是 `<video>` 的媒体直链。视频按需联网播放，不承诺离线缓存。
+
+## 四、写入网站仓库并验证
+
+先检查网站工作区和远端变化，保留他人改动。公开前将实际准备发布的主笔记设为 `draft: false`；模板默认草稿，不应忘记这一步。新项目从网站仓库根执行：
+
+```sh
+pnpm import --source '/absolute/publish-bundle/process.md' --collection experimentrecord --slug grip-lab --dry-run
+pnpm import --source '/absolute/publish-bundle/process.md' --collection experimentrecord --slug grip-lab
+```
+
+这里的路径和 slug 要替换成真实值。导入器会把 process.md 复制为 index.md，并收集声明附件。**已有项目不能重复 import，也没有 `pnpm import --update`。** 已有项目先对比本地和网站记录，再明确更新对应的 index.md、增量清单和新增附件；保留旧运行，不使用带删除语义的目录镜像。用文件比较/校验和确认正文和原 CSV 没有被无意改写。
+
+检查/预览命令在网站仓库执行，按 README 安装项目声明的 Node/pnpm 版本：
+
+```sh
+pnpm check
+BASE_PATH=/ResearchStream/ SITE_URL=https://jiang-524.github.io pnpm build
+pnpm test
+BASE_PATH=/ResearchStream/ SITE_URL=https://jiang-524.github.io pnpm preview --port 4321
+```
+
+Windows PowerShell 用对应 `$env:BASE_PATH` / `$env:SITE_URL` 赋值，或在 WSL 中运行上述命令。不要假设一次会话的工具专用 PATH 适用于其他机器。
+
+用生产预览实际打开 `/ResearchStream/experimentrecord/<slug>/`：
+
+- 方法笔记完整，目录、公式、代码块和图片正确；公开代码链接指向核实过的 commit，本地专用路径说明清楚。
+- 原有实验保留，新项目/实验/CSV 编号与来源标签正确，类型、状态、Series 和搜索可找到记录。
+- 选择实际 X/Y 和另一条对照曲线，检查坐标名称、单位、原始点、分图和平滑；下载 CSV 与源数据一致。平滑不改原值、不把缺失值补零。
+- 选中的 1–2 个视频确实能播放，caption 能追溯实验。HTTP 200 或存在 `<video>` 标签不能代替播放验证。
+
+构建失败时根据真实错误修复清单或附件，不跳过数据检查。没有运行/没有通过的检查必须如实报告。
+
+## 五、提交、上线和本地回执
+
+显式 `git add` 本项目的笔记、清单和选定附件，检查 staged diff/大小后提交；遵守 `coding_protocal.md` 的分支约定。`agent_dev` 推送只检查，默认分支 `main` 的 Actions 才部署 Pages。本次用户若已经授权上线，按现有仓库流程把通过检查的变更合入 main 并推送，不重复索要同一授权；仅授权本地记录/开发分支时，不自行扩大发布范围。合并前同步远端，发生冲突先判断并保留双方真实内容，不强推。
+
+写入失败保留本地成果，记录真实工具/命令、目标分支/路径和原始错误；不无证据推断“平台安全拦截”，也不通过反复尝试不同写入接口规避拒绝。
+
+发布验收要能对应**本次提交**：推送的 SHA → Actions build 结果 → deploy 结果 → 线上 `/ResearchStream/experimentrecord/<slug>/` 的新内容、CSV 和视频。构建通过但 deploy skipped、只有开发分支提交或仍是旧页面，都不能报告“已上线”。自动日报可能追加后续提交，核对提交关系而非覆盖它们。
+
+最后向用户给出项目 URL、提交/Actions 链接、本地记录位置、这次追加的实验号/CSV号/视频和未完成项。把实际发布回执追加到本地 process.md 的发布记录，留给下次同步；不要为把本次生成的 SHA 写进同一次部署而无限追加发布。

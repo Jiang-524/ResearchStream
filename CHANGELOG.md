@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-12 — ExpRecord 本地记录技能
+
+- 新增仓库内 ExpRecord.skil 和标准技能入口，覆盖本地主记录、发布目录、CSV/视频清单、增量更新及 GitHub Pages 验收。
+- 提供详细 process.md 模板：运行位置、方法与数据流、代码索引/调用链、逐步修改原因与日期、重要实验结果与时间、发布回执。
+- 明确本地文件链接和公开代码链接的边界、正文原样同步方式及每批 1–2 个典型视频的选择；板块模板下载改为 process.md。
+
 ## 2026-10-12 — experimentRecord 与跨项目数据对比
 
 - 新增 experimentRecord 导航、Markdown 方法主笔记和实验结果页，复现/改进标签、项目状态及现有搜索/Series 管理。

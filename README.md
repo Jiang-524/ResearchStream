@@ -88,11 +88,15 @@ tags: [reinforcement-learning, dexterous-manipulation]
 
 ## experimentRecord：给自己和本地 AI 的实验记录规范
 
-一个方法或论文对应一个项目目录。`index.md` 是这个方法的**主复现笔记**：保存整体方法框图，解释模块的输入、输出和关系；逐步记录你实际做过的操作、命令、为什么这样做、观察到的输出，以及失败和修复过程。改进实验还要说明改了什么、预期影响和对照条件。不要只留下实验分数或最后跑通的命令。
+给本地 AI 的完整流程见 [ExpRecord.skil](ExpRecord.skil)，标准技能入口在 [.agents/skills/exp-record/SKILL.md](.agents/skills/exp-record/SKILL.md)。把 [process.md 模板](public/templates/experiment-record/process.md) 保存到**实验代码项目根目录**，持续记录运行位置、详细方法、代码入口/调用链、每一步修改及原因和日期、重要实验结果与时间；网站 `index.md` 是完整笔记的发布副本。
+
+本地路径链接供本地编辑器使用；公开网页不能访问电脑磁盘。公开代码同时给出固定 commit 的 GitHub 链接，CSV/视频通过清单中的项目内相对路径发布。每批通常只选最后重要实验最典型的 1–2 个视频。技能包含新项目导入、已有项目增量更新和上线验收步骤。
+
+一个方法或论文对应一个项目目录。实验代码项目的 `process.md` 是这个方法的**本地主记录**，网站 `index.md` 是完整笔记的**发布副本**：保存整体方法框图，解释模块的输入、输出和关系；逐步记录你实际做过的操作、命令、为什么这样做、观察到的输出，以及失败和修复过程。改进实验还要说明改了什么、预期影响和对照条件。不要只留下实验分数或最后跑通的命令。
 
 项目分为“方法与复现笔记”和“实验结果”两个页签。列表支持全文、主题、标签、Series、类型（复现/改进）、项目状态和月份筛选；实验项目按 `updated`（没有则用 `date`）排序和筛选月份。`experimentKinds` 可以同时含两类；`status` 是整个项目状态，独立于每次运行的状态。新增运行后，记得更新这些项目元数据。
 
-从 [主笔记模板](public/templates/experiment-record/index.md) 和 [实验清单模板](public/templates/experiment-record/experiments.yaml) 开始，放进同一个项目目录。模板默认 `draft: true`、`experiments: []`；准备好公开时再改为 `draft: false`。无结果时也可以先发布主笔记。
+从 [详细 process.md 模板](public/templates/experiment-record/process.md)（或 [简版主笔记模板](public/templates/experiment-record/index.md)）和 [实验清单模板](public/templates/experiment-record/experiments.yaml) 开始，放进同一个项目目录。模板默认 `draft: true`、`experiments: []`；准备好公开时再改为 `draft: false`。无结果时也可以先发布主笔记。
 
 ```text
 content/experimentrecord/my-method/
