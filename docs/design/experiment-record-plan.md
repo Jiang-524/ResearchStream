@@ -33,11 +33,11 @@ Files: create `src/lib/experiments.mjs`, `src/lib/experiment-data.mjs`, `tests/e
 
 Interfaces: `readExperimentProject(entry, base)` returns normalized project and attachments; `readExperimentProjects(entries, base)` returns published projects. `parseCsv(text, csv)` returns `{headers, rows}`; `metricPoints(parsed, csv, metric)` returns `{points, skippedX, missingY}`; `smoothPoints(points, weight)` preserves x and nulls; `comparisonGroup(csv, metric)` identifies compatible axes.
 
-- [ ] Add tests asserting named/numbered mappings, quoted multiline CSV, logical header/data rows, scientific notation, duplicate headers, missing y, invalid x, and exact EMA `[2,4,null,10]` at .5 → `[2,3,null,10]`.
-- [ ] Run tests and observe missing-module failures before creating the modules.
-- [ ] Implement CSV parsing, validation, stable IDs/numbers and confined attachment resolution, with original errors identifying the project/file.
-- [ ] Run both test files; include six 100,000-row series processing and manifest rejection tests for duplicate IDs and traversal.
-- [ ] Commit tested data layer.
+- [x] Add tests asserting named/numbered mappings, quoted multiline CSV, logical header/data rows, scientific notation, duplicate headers, missing y, invalid x, and exact EMA `[2,4,null,10]` at .5 → `[2,3,null,10]`.
+- [x] Run tests and observe missing-module failures before creating the modules.
+- [x] Implement CSV parsing, validation, stable IDs/numbers and confined attachment resolution, with original errors identifying the project/file.
+- [x] Run both test files; include six 100,000-row series processing and manifest rejection tests for duplicate IDs and traversal.
+- [x] Commit tested data layer.
 
 ## Task 2: Static content, search and attachments
 
@@ -45,11 +45,11 @@ Files: modify content config/helpers, Archive/Card/Base, article route, entries 
 
 Interfaces: consumes normalized projects from Task 1. `/experiments.json` lists public project/experiment/CSV/metric mappings with base-aware asset URLs; no raw CSV in the index. Article layout passes current project and all public projects to the result component.
 
-- [ ] Add failing integration assertions for navigation, experiment routes, indexed metadata and published attachments.
-- [ ] Register collection/schema and discovery filters, using updated date for experiment sorting.
-- [ ] Copy only referenced attachments, serve them in development, validate CSV mappings during build; extend local import support.
-- [ ] Keep viewed CSVs available offline while excluding video and Range requests from caching. Add behavioral offline test.
-- [ ] Build with `/ResearchStream/` and run check/tests; commit the integrated content layer.
+- [x] Add failing integration assertions for navigation, experiment routes, indexed metadata and published attachments.
+- [x] Register collection/schema and discovery filters, using updated date for experiment sorting.
+- [x] Copy only referenced attachments, serve them in development, validate CSV mappings during build; extend local import support.
+- [x] Keep viewed CSVs available offline while excluding video and Range requests from caching. Add behavioral offline test.
+- [x] Build with `/ResearchStream/` and run check/tests; commit the integrated content layer.
 
 ## Task 3: Results and cross-project comparisons
 
@@ -57,18 +57,20 @@ Files: create `src/components/ExperimentResults.astro`, `src/scripts/experiments
 
 Interfaces: consumes experiment index and Task 1 data functions. Each selected curve keeps project, experiment, CSV and metric identities; chart panels group by x quantity/unit and y quantity/unit. Tab controls use `#results`/`#notes`; no hidden content when JavaScript is unavailable.
 
-- [ ] Implement experiment overview cards, metadata, downloadable CSV/config and video gallery with native controls.
-- [ ] Add cascading project/experiment/CSV/metric selectors and searchable sources, selected-curve list, independent visibility/removal and full labels.
-- [ ] Lazy-load charts and CSVs, cancel stale render results; add EMA, raw overlay, zoom, reset, range sliders, tooltip, expand and PNG export.
-- [ ] Verify real browser behavior: cross-project selection, incompatible-unit panels, smoothing and reset, rapid selection/removal, theme/language changes and mobile layout.
-- [ ] Run production check/build/tests, inspect browser output and commit UI.
+- [x] Implement experiment overview cards, metadata, downloadable CSV/config and video gallery with native controls.
+- [x] Add cascading project/experiment/CSV/metric selectors and searchable sources, selected-curve list, independent visibility/removal and full labels.
+- [x] Lazy-load charts and CSVs, cancel stale render results; add EMA, raw overlay, zoom, reset, range sliders, tooltip, expand and PNG export.
+- [x] Verify real browser behavior: cross-project selection, incompatible-unit panels, smoothing and reset, rapid selection/removal, theme/language changes and mobile layout.
+- [x] Run production check/build/tests, inspect browser output and commit UI.
 
 ## Task 4: Templates, documentation and full validation
 
 Files: README, CHANGELOG, public templates, two clearly labeled experiment demonstration projects with deterministic CSVs and a small demonstration video; verification report.
 
-- [ ] Provide copyable Markdown/YAML templates and document coordinate mapping, stable IDs/numbers, video, offline boundaries and local AI workflow.
-- [ ] Label all demonstration data as synthetic, keep actual user experiments empty; add two projects each with two experiments/multiple CSVs for verification.
-- [ ] Run check, production build with project base, entire suite, browser interaction/mobile/offline/video checks and 100k-row comparison test.
-- [ ] Request one independent whole-change review; address material findings and rerun affected checks.
+- [x] Provide copyable Markdown/YAML templates and document coordinate mapping, stable IDs/numbers, video, offline boundaries and local AI workflow.
+- [x] Label all demonstration data as synthetic, keep actual user experiments empty; add two projects each with two experiments/multiple CSVs for verification.
+- [x] Run check, production build with project base, entire suite, browser interaction/mobile/offline/video checks and 100k-row comparison test.
+- [x] Request one independent whole-change review; address material findings and rerun affected checks.
 - [ ] Commit final verified changes; push `agent_dev` under repository authorization and verify its Actions result. Report reviewable branch and preview; do not claim main has deployed.
+
+Execution note: Tasks 2 and 3 were integrated in commit 92750f2 because the route, result component, index and browser controls are mutually dependent. Demonstration fixtures and templates were included there to keep the feature independently buildable; Task 4 contains documentation and final verification.
