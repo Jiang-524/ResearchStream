@@ -22,16 +22,20 @@
     "@fontsource/jetbrains-mono": "^5.2.0",
     "@fontsource/newsreader": "^5.2.0",
     "astro": "7.3.6",
+    "echarts": "^6.1.0",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.22",
     "mdast-util-from-markdown": "^2.1.0",
     "pagefind": "1.5.2",
+    "papaparse": "^5.7.0",
     "rehype-katex": "^7.0.1",
     "rehype-sanitize": "^6.0.0",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@types/papaparse": "^5.5.2",
     "typescript": "^5.9.3"
   }
 }
