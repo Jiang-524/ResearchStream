@@ -1,0 +1,172 @@
+# Real training runs, source: TensorBoard event files. Unavailable samples are blank.
+experiments:
+  - id: native-kuka-sharpa-sapg
+    number: 1
+    title: "原生 Play2Perfect KUKA + SHARPA · 4096 env SAPG"
+    date: "2026-10-12"
+    kind: reproduction
+    status: completed
+    seed: 42
+    commit: e8575894d6fc3ab9a857261c6cb5ede7e0b0bb0f
+    hardware: "amax, NVIDIA RTX 4090, Isaac Sim 5.1.0 + Isaac Lab 2.3.2"
+    dataset: "Play2Perfect procedural tools: 1200 generated URDF variants, 6 object categories"
+    summary: "12000 epochs; 786432000 environment frames; final deterministic 24/24 episodes yielded 0 goal successes; this is not a full seven-day paper reproduction."
+    config: runs/native/config.yaml
+    csvs:
+      - id: training
+        number: 1
+        title: "真实训练 TensorBoard 标量（逐 event step）"
+        path: runs/native/training.csv
+        headerRow: 1
+        dataStartRow: 2
+        x:
+          column: environment_steps
+          label: 累计环境交互步数
+          quantity: environment-interaction
+          unit: count
+        metrics:
+          - id: episode-reward
+            column: episode_reward
+            label: Episode 累计奖励
+            quantity: episodic-return
+            unit: reward
+          - id: goals-per-episode
+            column: goals_per_episode
+            label: 每 Episode 达成 Goal 的平均次数
+            quantity: completed-goals-per-episode
+            unit: goals/episode
+          - id: drop-fraction
+            column: fall_fraction
+            label: 物体掉落终止比例
+            quantity: drop-termination-fraction
+            unit: fraction
+          - id: timeout-fraction
+            column: timeout_fraction
+            label: Episode 超时比例
+            quantity: timeout-termination-fraction
+            unit: fraction
+          - id: keypoint-reward
+            column: keypoint_reward
+            label: 6D 关键点进步奖励
+            quantity: keypoint-reward
+            unit: reward
+          - id: lifting-reward
+            column: lifting_reward
+            label: 抬升进步奖励
+            quantity: lifting-reward
+            unit: reward
+          - id: lift-bonus
+            column: lift_bonus_reward
+            label: 首次抬升奖励
+            quantity: lift-bonus-reward
+            unit: reward
+          - id: goal-bonus
+            column: goal_bonus_reward
+            label: Goal 奖励
+            quantity: goal-bonus-reward
+            unit: reward
+          - id: curriculum-tolerance
+            column: tolerance_m
+            label: 课程容差配置参数
+            quantity: curriculum-tolerance-parameter
+            unit: m
+          - id: actor-loss
+            column: actor_loss
+            label: Actor Loss
+            quantity: actor-loss
+            unit: ""
+          - id: critic-loss
+            column: critic_loss
+            label: Critic Loss
+            quantity: critic-loss
+            unit: ""
+
+    videos:
+      - title: "原生 KUKA + SHARPA：最终策略真实 RGB 回放"
+        src: runs/native/final-rgb.mp4
+        caption: "final epoch 12000 checkpoint；Leader-only 确定性单环境、Isaac RTX 960×720 60fps 6秒。此片不展示 Goal 成功；24 episode 独立评估均未成功。重新聚焦镜头，仅供定性对照。"
+  - id: tianji-wuji-sapg
+    number: 2
+    title: "Tianji + Wuji Hand2 · 8192 env SAPG 机器人适配"
+    date: "2026-10-12"
+    kind: improvement
+    status: completed
+    seed: 42
+    commit: ebe6dc593a2e8025003b27f232a2105803d75024
+    hardware: "amax, NVIDIA RTX 4090, Isaac Sim 5.1.0 + Isaac Lab 2.3.2"
+    dataset: "Play2Perfect procedural tools: 240 generated URDF variants, 6 object categories; uncalibrated Tianji-Wuji mount"
+    summary: "4000 epochs; 524288000 environment frames; final deterministic 24/24 episodes yielded 0 goal successes. Improvement denotes robot adaptation, not positive results."
+    config: runs/wuji/config.yaml
+    csvs:
+      - id: training
+        number: 1
+        title: "真实训练 TensorBoard 标量（逐 event step）"
+        path: runs/wuji/training.csv
+        headerRow: 1
+        dataStartRow: 2
+        x:
+          column: environment_steps
+          label: 累计环境交互步数
+          quantity: environment-interaction
+          unit: count
+        metrics:
+          - id: episode-reward
+            column: episode_reward
+            label: Episode 累计奖励
+            quantity: episodic-return
+            unit: reward
+          - id: goals-per-episode
+            column: goals_per_episode
+            label: 每 Episode 达成 Goal 的平均次数
+            quantity: completed-goals-per-episode
+            unit: goals/episode
+          - id: drop-fraction
+            column: fall_fraction
+            label: 物体掉落终止比例
+            quantity: drop-termination-fraction
+            unit: fraction
+          - id: timeout-fraction
+            column: timeout_fraction
+            label: Episode 超时比例
+            quantity: timeout-termination-fraction
+            unit: fraction
+          - id: keypoint-reward
+            column: keypoint_reward
+            label: 6D 关键点进步奖励
+            quantity: keypoint-reward
+            unit: reward
+          - id: lifting-reward
+            column: lifting_reward
+            label: 抬升进步奖励
+            quantity: lifting-reward
+            unit: reward
+          - id: lift-bonus
+            column: lift_bonus_reward
+            label: 首次抬升奖励
+            quantity: lift-bonus-reward
+            unit: reward
+          - id: goal-bonus
+            column: goal_bonus_reward
+            label: Goal 奖励
+            quantity: goal-bonus-reward
+            unit: reward
+          - id: curriculum-tolerance
+            column: tolerance_m
+            label: 课程容差配置参数
+            quantity: curriculum-tolerance-parameter
+            unit: m
+          - id: actor-loss
+            column: actor_loss
+            label: Actor Loss
+            quantity: actor-loss
+            unit: ""
+          - id: critic-loss
+            column: critic_loss
+            label: Critic Loss
+            quantity: critic-loss
+            unit: ""
+
+    videos:
+      - title: "Tianji + Wuji Hand2：最终策略真实 RGB 回放"
+        src: runs/wuji/final-rgb.mp4
+        caption: "final epoch 4000 checkpoint；Leader-only 确定性单环境、Isaac RTX 960×720 60fps 6秒。此片未完成 Goal；24 episode 独立评估均未成功。原来只提供骨架回放，本次重新录制完整 RGB。"

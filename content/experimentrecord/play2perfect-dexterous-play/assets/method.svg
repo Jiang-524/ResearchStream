@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 336" role="img" aria-label="Play2Perfect method: randomized play to SAPG recurrent actor to assembly finetuning">
+<rect width="1100" height="336" rx="18" fill="#fcfcfa"/>
+<text x="28" y="34" fill="#151a23" font-family="Arial,sans-serif" font-size="20" font-weight="700">Play2Perfect — two-stage learning and SAPG optimization</text>
+<rect x="28" y="62" width="265" height="190" rx="13" fill="#eaf1f8" stroke="#9fb4cc"/>
+<text x="47" y="94" fill="#1c3e69" font-family="Arial,sans-serif" font-size="17" font-weight="700">Stage 1: Randomized Play</text>
+<text x="47" y="121" fill="#242e42" font-family="Arial,sans-serif" font-size="14">Primitive object geometry / mass</text>
+<text x="47" y="146" fill="#242e42" font-family="Arial,sans-serif" font-size="14">Randomized object pose</text>
+<text x="47" y="171" fill="#242e42" font-family="Arial,sans-serif" font-size="14">Online 6D pose goals</text>
+<text x="47" y="196" fill="#242e42" font-family="Arial,sans-serif" font-size="14">Grasp + lift + pose reward</text>
+<text x="47" y="227" fill="#466788" font-family="Arial,sans-serif" font-size="13">Isaac Sim, 60 Hz policy</text>
+<path d="M302 151 L343 151" stroke="#5c738b" stroke-width="3"/><path d="M335 145 L345 151 L335 157" fill="none" stroke="#5c738b" stroke-width="3"/>
+<rect x="350" y="62" width="387" height="190" rx="13" fill="#f8f0e7" stroke="#d2b795"/>
+<text x="372" y="94" fill="#93561d" font-family="Arial,sans-serif" font-size="17" font-weight="700">Recurrent Gaussian Actor</text>
+<rect x="372" y="112" width="340" height="36" rx="8" fill="#fff9f1" stroke="#deccb7"/>
+<text x="388" y="135" fill="#51402c" font-family="Arial,sans-serif" font-size="14">Observation + learnable SAPG group ID</text>
+<rect x="372" y="160" width="159" height="39" rx="8" fill="#fff9f1" stroke="#deccb7"/>
+<rect x="552" y="160" width="160" height="39" rx="8" fill="#fff9f1" stroke="#deccb7"/>
+<text x="388" y="185" fill="#51402c" font-family="Arial,sans-serif" font-size="14">LSTM (1024)</text>
+<text x="565" y="185" fill="#51402c" font-family="Arial,sans-serif" font-size="14">MLP + Gaussian head</text>
+<path d="M531 179 L548 179" stroke="#93561d" stroke-width="2"/><path d="M543 175 L550 179 L543 183" fill="none" stroke="#93561d" stroke-width="2"/>
+<text x="372" y="224" fill="#73563c" font-family="Arial,sans-serif" font-size="13">29D original / 27D adapted actions</text>
+<path d="M745 151 L784 151" stroke="#5c738b" stroke-width="3"/><path d="M776 145 L786 151 L776 157" fill="none" stroke="#5c738b" stroke-width="3"/>
+<rect x="793" y="62" width="277" height="190" rx="13" fill="#eaf4ed" stroke="#99bca4"/>
+<text x="812" y="94" fill="#2e6741" font-family="Arial,sans-serif" font-size="17" font-weight="700">SAPG: Split &amp; Aggregate</text>
+<text x="812" y="124" fill="#263c31" font-family="Arial,sans-serif" font-size="14">Follower exploration + Leader</text>
+<text x="812" y="149" fill="#263c31" font-family="Arial,sans-serif" font-size="14">Shared neural backbone</text>
+<text x="812" y="174" fill="#263c31" font-family="Arial,sans-serif" font-size="14">Off-policy experience sharing</text>
+<text x="812" y="206" fill="#477757" font-family="Arial,sans-serif" font-size="13">Optimize rewards &amp; values</text>
+<rect x="28" y="268" width="1042" height="47" rx="11" fill="#f4f5f6" stroke="#d3d8df"/>
+<text x="46" y="297" fill="#343e4b" font-family="Arial,sans-serif" font-size="14" font-weight="600">Stage 2 (paper only; not reproduced here): pretrained play policy → CAD-derived sparse assembly goals → RL finetuning</text>
+</svg>
